@@ -1,0 +1,10 @@
+.venv/
+__pycache__/
+*.pyc
+debug/*
+!debug/.gitkeep
+out/*
+!out/.gitkeep
+state/*
+!state/.gitkeep
+!state/seen_urls.json
