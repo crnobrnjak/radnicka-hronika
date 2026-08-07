@@ -38,7 +38,7 @@ import requests
 from bs4 import BeautifulSoup
 
 GDELT_ENDPOINT = "https://api.gdeltproject.org/api/v2/doc/doc"
-DEFAULT_UA = "RadnickaHronika/0.2 (+contact: promeni-me@example.com)"
+DEFAULT_UA = "RadnickaHronika/0.2 (+contact: kostacrn@gmail.com)"
 
 BASE_DIR = Path(__file__).resolve().parent
 OUT_DIR = BASE_DIR / "out"
@@ -48,38 +48,91 @@ SOURCES_PATH = BASE_DIR / "sources.json"
 HIDDEN_URLS_PATH = BASE_DIR / "hidden_urls.txt"
 
 # GDELT sourcecountry znači "medij iz Srbije", a ne "događaj u Srbiji".
-# Zato upit ZAHTEVA i srpski geografski kontekst u tekstu članka.
-# Jedan poziv smanjuje i verovatnoću HTTP 429.
-GDELT_LABOR = (
-    '(strike OR walkout OR layoffs OR "job cuts" OR "unpaid wages" '
-    'OR "workers rights" OR "labor rights" OR "workplace harassment" '
+# V4 zato koristi KRATAK upit: jedan OR blok + obavezno Serbia + sourcecountry.
+# Prethodni dugački upit je povremeno vraćao tekst/HTML umesto JSON-a, a GDELT
+# je i zvanično rate-limited. Ako primarni upit ne uspe, probamo još kraći fallback.
+GDELT_QUERY = (
+    '(strike OR layoffs OR "job cuts" OR "unpaid wages" OR "workers rights" '
     'OR "working conditions" OR "workplace injury" OR "work accident" '
-    'OR "worker injured" OR "worker killed")'
+    'OR "worker injured" OR "worker killed" OR mobbing) '
+    "Serbia sourcecountry:serbia"
 )
 
-GDELT_SERBIA = (
-    '(Serbia OR Serbian OR Belgrade OR "Novi Sad" OR Nis OR Kragujevac '
-    'OR Kraljevo OR Cacak OR Uzice OR Zrenjanin OR Subotica OR Leskovac '
-    'OR Vranje OR Prokuplje OR "Novi Pazar" OR Smederevo OR Pancevo)'
+GDELT_FALLBACK_QUERY = (
+    '(strike OR layoffs OR "unpaid wages" OR "workplace injury" OR "worker killed") '
+    "Serbia sourcecountry:serbia"
 )
-
-GDELT_QUERY = f"{GDELT_LABOR} {GDELT_SERBIA} sourcecountry:serbia"
 
 
 # ---------------------------------------------------------------------------
 # Normalizacija
 # ---------------------------------------------------------------------------
 
-CYR_TO_LAT = str.maketrans({
-    "а":"a","б":"b","в":"v","г":"g","д":"d","ђ":"dj","е":"e","ж":"z","з":"z",
-    "и":"i","ј":"j","к":"k","л":"l","љ":"lj","м":"m","н":"n","њ":"nj","о":"o",
-    "п":"p","р":"r","с":"s","т":"t","ћ":"c","у":"u","ф":"f","х":"h","ц":"c",
-    "ч":"c","џ":"dz","ш":"s",
-    "А":"a","Б":"b","В":"v","Г":"g","Д":"d","Ђ":"dj","Е":"e","Ж":"z","З":"z",
-    "И":"i","Ј":"j","К":"k","Л":"l","Љ":"lj","М":"m","Н":"n","Њ":"nj","О":"o",
-    "П":"p","Р":"r","С":"s","Т":"t","Ћ":"c","У":"u","Ф":"f","Х":"h","Ц":"c",
-    "Ч":"c","Џ":"dz","Ш":"s",
-})
+CYR_TO_LAT = str.maketrans(
+    {
+        "а": "a",
+        "б": "b",
+        "в": "v",
+        "г": "g",
+        "д": "d",
+        "ђ": "dj",
+        "е": "e",
+        "ж": "z",
+        "з": "z",
+        "и": "i",
+        "ј": "j",
+        "к": "k",
+        "л": "l",
+        "љ": "lj",
+        "м": "m",
+        "н": "n",
+        "њ": "nj",
+        "о": "o",
+        "п": "p",
+        "р": "r",
+        "с": "s",
+        "т": "t",
+        "ћ": "c",
+        "у": "u",
+        "ф": "f",
+        "х": "h",
+        "ц": "c",
+        "ч": "c",
+        "џ": "dz",
+        "ш": "s",
+        "А": "a",
+        "Б": "b",
+        "В": "v",
+        "Г": "g",
+        "Д": "d",
+        "Ђ": "dj",
+        "Е": "e",
+        "Ж": "z",
+        "З": "z",
+        "И": "i",
+        "Ј": "j",
+        "К": "k",
+        "Л": "l",
+        "Љ": "lj",
+        "М": "m",
+        "Н": "n",
+        "Њ": "nj",
+        "О": "o",
+        "П": "p",
+        "Р": "r",
+        "С": "s",
+        "Т": "t",
+        "Ћ": "c",
+        "У": "u",
+        "Ф": "f",
+        "Х": "h",
+        "Ц": "c",
+        "Ч": "c",
+        "Џ": "dz",
+        "Ш": "s",
+    }
+)
+
 
 def norm_text(s: str) -> str:
     s = (s or "").translate(CYR_TO_LAT).lower().replace("đ", "dj")
@@ -95,8 +148,14 @@ def norm_text(s: str) -> str:
 # Ovi URL putevi gotovo uvek znače da je kategorijski RSS skliznuo na
 # sadržaj koji nema veze sa našom namenom.
 NON_LABOR_URL_PARTS = (
-    "/sport/", "/zabava/", "/jetset/", "/vip/", "/rijaliti/",
-    "/kultura/", "/svet/", "/planeta/",
+    "/sport/",
+    "/zabava/",
+    "/jetset/",
+    "/vip/",
+    "/rijaliti/",
+    "/kultura/",
+    "/svet/",
+    "/planeta/",
 )
 
 # Ako je naslov očigledno o inostranstvu, odbaci ga. Lista nije zamišljena
@@ -133,6 +192,20 @@ ENTERTAINMENT_SPORT_RX = re.compile(
 
 HUNGER_STRIKE_RX = re.compile(
     r"\bstrajk\w*.{0,14}\bgladj\w*|\bgladj\w*.{0,14}\bstrajk\w*",
+    re.I,
+)
+
+# Štrajk glađu NIJE automatski odbačen: prolazi ako je jasno da ga vode
+# radnici/zaposleni/sindikat i da je povod konkretno radno pitanje.
+HUNGER_WORKER_RX = re.compile(
+    r"\b(radni[ck]|zaposlen|sindikat|prosvet|nastavnik|ucitelj|lekar|vozac|rudar)\w*",
+    re.I,
+)
+
+HUNGER_LABOR_ISSUE_RX = re.compile(
+    r"\b(plat|zarad|akontacij|otkaz|otpust|poslodav|radn\w+\s+prav|"
+    r"uslov\w+\s+rada|ugovor\w*\s+o\s+radu|radn\w+\s+mest|"
+    r"prekovremen|neprijavljen|minimalac|minimaln\w+\s+zarad)\w*",
     re.I,
 )
 
@@ -182,7 +255,8 @@ def hard_reject(item: Item) -> str:
     url = norm_text(item.url)
 
     if HUNGER_STRIKE_RX.search(text):
-        return "štrajk glađu"
+        if not (HUNGER_WORKER_RX.search(text) and HUNGER_LABOR_ISSUE_RX.search(text)):
+            return "štrajk glađu bez jasnog radničkog konteksta"
 
     if any(part in url for part in NON_LABOR_URL_PARTS):
         return "sportska/zabavna/svetska rubrika"
@@ -250,13 +324,34 @@ def classify_item(item: Item) -> tuple[list[str], list[str], str]:
 
     # 4) Neisplaćene / umanjene plate, zarade, akontacije
     wage_nonpayment_patterns = (
-        (r"\b(neisplac|neisplat)\w*.{0,35}\b(zarad|plat|akontacij)\w*", "neisplaćena zarada/akontacija"),
-        (r"\b(zarad|plat|akontacij)\w*.{0,35}\b(neisplac|neisplat)\w*", "neisplaćena zarada/akontacija"),
-        (r"\bnije\s+isplac\w*.{0,30}\b(zarad|plat|akontacij)\w*", "nije isplaćena zarada/akontacija"),
-        (r"\bnisu\s+isplac\w*.{0,30}\b(zarad|plat|akontacij)\w*", "nisu isplaćene zarade"),
-        (r"\bbez\s+(plate|plata|zarade|zarada|akontacije|akontacija)\b", "bez plate/akontacije"),
-        (r"\bnisu\s+(primili|dobili)\b.{0,35}\b(zarad|plat|akontacij)\w*", "nisu primili zaradu/akontaciju"),
-        (r"\b(umanjen|umanjiv)\w*.{0,20}\b(zarad|plat|akontacij)\w*", "umanjena zarada/akontacija"),
+        (
+            r"\b(neisplac|neisplat)\w*.{0,35}\b(zarad|plat|akontacij)\w*",
+            "neisplaćena zarada/akontacija",
+        ),
+        (
+            r"\b(zarad|plat|akontacij)\w*.{0,35}\b(neisplac|neisplat)\w*",
+            "neisplaćena zarada/akontacija",
+        ),
+        (
+            r"\bnije\s+isplac\w*.{0,30}\b(zarad|plat|akontacij)\w*",
+            "nije isplaćena zarada/akontacija",
+        ),
+        (
+            r"\bnisu\s+isplac\w*.{0,30}\b(zarad|plat|akontacij)\w*",
+            "nisu isplaćene zarade",
+        ),
+        (
+            r"\bbez\s+(plate|plata|zarade|zarada|akontacije|akontacija)\b",
+            "bez plate/akontacije",
+        ),
+        (
+            r"\bnisu\s+(primili|dobili)\b.{0,35}\b(zarad|plat|akontacij)\w*",
+            "nisu primili zaradu/akontaciju",
+        ),
+        (
+            r"\b(umanjen|umanjiv)\w*.{0,20}\b(zarad|plat|akontacij)\w*",
+            "umanjena zarada/akontacija",
+        ),
         (r"\bkasn\w*.{0,22}\b(zarad|plat)\w*", "kašnjenje zarade"),
     )
     for pattern, reason in wage_nonpayment_patterns:
@@ -264,9 +359,8 @@ def classify_item(item: Item) -> tuple[list[str], list[str], str]:
             add("Neisplaćene / umanjene zarade", reason)
             break
 
-    if (
-        re.search(r"\bminimalac\b|\bminimaln\w+\s+zarad\w*", text)
-        and re.search(r"\b(sindikat|zaposlen|radni[ck]|sss|ugs|pregovor)\w*", text)
+    if re.search(r"\bminimalac\b|\bminimaln\w+\s+zarad\w*", text) and re.search(
+        r"\b(sindikat|zaposlen|radni[ck]|sss|ugs|pregovor)\w*", text
     ):
         add("Zarade / minimalac", "minimalna zarada + radnički/sindikalni kontekst")
 
@@ -311,13 +405,10 @@ def classify_item(item: Item) -> tuple[list[str], list[str], str]:
                 add("Povreda na radu", "radnik povređen + kontekst radnog mesta")
 
     # 8) Sindikat nije dovoljan sam za sebe; mora postojati konkretno radno pitanje.
-    if (
-        re.search(r"\bsindikat\w*", text)
-        and re.search(
-            r"\b(neisplac|isplat|zarad|plat|minimal|otkaz|otpust|strajk|"
-            r"uslov|prav|tuzb|spor|akontacij|protest|kolektivn\w+\s+ugovor)\w*",
-            text,
-        )
+    if re.search(r"\bsindikat\w*", text) and re.search(
+        r"\b(neisplac|isplat|zarad|plat|minimal|otkaz|otpust|strajk|"
+        r"uslov|prav|tuzb|spor|akontacij|protest|kolektivn\w+\s+ugovor)\w*",
+        text,
     ):
         add("Sindikalno pitanje", "sindikat + konkretno pitanje rada")
 
@@ -331,13 +422,17 @@ def classify_item(item: Item) -> tuple[list[str], list[str], str]:
 # HTTP
 # ---------------------------------------------------------------------------
 
+
 class Fetcher:
     def __init__(self, user_agent: str, retries: int = 3, timeout: int = 25):
         self.session = requests.Session()
-        self.session.headers.update({
-            "User-Agent": user_agent,
-            "Accept-Language": "sr,en;q=0.8",
-        })
+        self.session.headers.update(
+            {
+                "User-Agent": user_agent,
+                "Accept-Language": "sr,en;q=0.8",
+                "Accept": "application/rss+xml, application/atom+xml, application/xml, text/xml, text/html;q=0.9, */*;q=0.8",
+            }
+        )
         self.retries = retries
         self.timeout = timeout
 
@@ -345,7 +440,9 @@ class Fetcher:
         last = None
         for attempt in range(self.retries):
             try:
-                r = self.session.get(url, timeout=self.timeout, allow_redirects=True, **kwargs)
+                r = self.session.get(
+                    url, timeout=self.timeout, allow_redirects=True, **kwargs
+                )
                 if r.status_code == 200:
                     return r
                 last = RuntimeError(f"HTTP {r.status_code} za {url}")
@@ -359,7 +456,7 @@ class Fetcher:
                     continue
             except Exception as e:
                 last = e
-            time.sleep(1.2 * (2 ** attempt))
+            time.sleep(1.2 * (2**attempt))
         raise RuntimeError(f"Neuspešan GET {url}: {last}")
 
 
@@ -367,10 +464,13 @@ class Fetcher:
 # URL / source helpers
 # ---------------------------------------------------------------------------
 
+
 def clean_url(url: str) -> str:
     try:
         p = urlparse(url.strip())
-        return urlunparse((p.scheme or "https", p.netloc.lower(), p.path, p.params, p.query, ""))
+        return urlunparse(
+            (p.scheme or "https", p.netloc.lower(), p.path, p.params, p.query, "")
+        )
     except Exception:
         return url.strip()
 
@@ -385,16 +485,45 @@ def same_site(url: str, base_url: str) -> bool:
 
 
 BAD_LINK_TEXT = {
-    "naslovna", "početna", "pocetna", "vesti", "društvo", "drustvo", "ekonomija",
-    "politika", "biznis", "opširnije", "opsirnije", "više", "vise",
-    "sledeća strana", "sledeca strana", "kontakt", "o nama", "marketing",
-    "search", "pretraga",
+    "naslovna",
+    "početna",
+    "pocetna",
+    "vesti",
+    "društvo",
+    "drustvo",
+    "ekonomija",
+    "politika",
+    "biznis",
+    "opširnije",
+    "opsirnije",
+    "više",
+    "vise",
+    "sledeća strana",
+    "sledeca strana",
+    "kontakt",
+    "o nama",
+    "marketing",
+    "search",
+    "pretraga",
 }
 
 BAD_HREF_PARTS = (
-    "/tag/", "/author/", "/category/", "/kategorija/", "/wp-login", "/wp-admin",
-    "/feed/", "/kontakt", "/contact", "/o-nama", "/about",
-    "/politika-privatnosti", "/privacy", "#", "javascript:", "mailto:",
+    "/tag/",
+    "/author/",
+    "/category/",
+    "/kategorija/",
+    "/wp-login",
+    "/wp-admin",
+    "/feed/",
+    "/kontakt",
+    "/contact",
+    "/o-nama",
+    "/about",
+    "/politika-privatnosti",
+    "/privacy",
+    "#",
+    "javascript:",
+    "mailto:",
 )
 
 
@@ -414,6 +543,7 @@ def plausible_article_link(title: str, url: str, source_url: str) -> bool:
 # ---------------------------------------------------------------------------
 # RSS / HTML
 # ---------------------------------------------------------------------------
+
 
 def section_feed_guess(page_url: str) -> str:
     return page_url.rstrip("/") + "/feed/"
@@ -462,21 +592,25 @@ def parse_feed_bytes(content: bytes, source: dict, max_items: int) -> list[Item]
 
     out = []
     for entry in parsed.entries[:max_items]:
-        title = BeautifulSoup(entry.get("title", ""), "html.parser").get_text(" ", strip=True)
+        title = BeautifulSoup(entry.get("title", ""), "html.parser").get_text(
+            " ", strip=True
+        )
         link = clean_url(entry.get("link", ""))
         if not title or not link or not same_site(link, source["url"]):
             continue
         summary_html = entry.get("summary", "") or entry.get("description", "")
         summary = BeautifulSoup(summary_html, "html.parser").get_text(" ", strip=True)
         date = entry.get("published", "") or entry.get("updated", "")
-        out.append(Item(
-            title=title,
-            url=link,
-            source=source["name"],
-            source_kind="rss",
-            summary=summary[:900],
-            date=date[:100],
-        ))
+        out.append(
+            Item(
+                title=title,
+                url=link,
+                source=source["name"],
+                source_kind="rss",
+                summary=summary[:900],
+                date=date[:100],
+            )
+        )
     return out
 
 
@@ -498,16 +632,18 @@ def parse_listing_html(soup: BeautifulSoup, source: dict, max_items: int) -> lis
 
         context = re.sub(r"\s+", " ", context or "").strip()
         if context.startswith(title):
-            context = context[len(title):].strip(" -–—|:")
+            context = context[len(title) :].strip(" -–—|:")
 
-        found.append(Item(
-            title=title,
-            url=url,
-            source=source["name"],
-            source_kind="html",
-            summary=context[:900],
-            date=(date or "")[:100],
-        ))
+        found.append(
+            Item(
+                title=title,
+                url=url,
+                source=source["name"],
+                source_kind="html",
+                summary=context[:900],
+                date=(date or "")[:100],
+            )
+        )
 
     for node in soup.find_all("article"):
         heading = node.find(["h1", "h2", "h3", "h4"])
@@ -517,7 +653,12 @@ def parse_listing_html(soup: BeautifulSoup, source: dict, max_items: int) -> lis
             date = ""
             if time_node:
                 date = time_node.get("datetime") or time_node.get_text(" ", strip=True)
-            add(a.get_text(" ", strip=True), a["href"], node.get_text(" ", strip=True), date)
+            add(
+                a.get_text(" ", strip=True),
+                a["href"],
+                node.get_text(" ", strip=True),
+                date,
+            )
 
     if len(found) < 5:
         for heading in soup.find_all(["h2", "h3", "h4"]):
@@ -526,7 +667,11 @@ def parse_listing_html(soup: BeautifulSoup, source: dict, max_items: int) -> lis
                 parent = heading.parent
                 context = parent.get_text(" ", strip=True) if parent else ""
                 time_node = parent.find("time") if parent else None
-                date = (time_node.get("datetime") or time_node.get_text(" ", strip=True)) if time_node else ""
+                date = (
+                    (time_node.get("datetime") or time_node.get_text(" ", strip=True))
+                    if time_node
+                    else ""
+                )
                 add(a.get_text(" ", strip=True), a["href"], context, date)
 
     if len(found) < 5:
@@ -539,16 +684,38 @@ def parse_listing_html(soup: BeautifulSoup, source: dict, max_items: int) -> lis
     return found[:max_items]
 
 
-def collect_source(fetcher: Fetcher, source: dict, max_items: int) -> tuple[list[Item], dict]:
+def collect_source(
+    fetcher: Fetcher, source: dict, max_items: int
+) -> tuple[list[Item], dict]:
     status = {
         "source": source["name"],
         "url": source["url"],
         "method": "",
         "feed_url": "",
+        "feed_error": "",
         "candidates": 0,
         "error": "",
     }
 
+    # V4: ako u sources.json već znamo tačan feed, probaj NJEGA PRE landing
+    # stranice. Ovo je bitno za sajtove koji GitHub Actions runneru vraćaju
+    # 403 na kategorijskoj stranici, iako im RSS normalno postoji.
+    explicit_feed = source.get("feed_url", "").strip()
+    if explicit_feed:
+        try:
+            r = fetcher.get(explicit_feed)
+            items = parse_feed_bytes(r.content, source, max_items)
+            if items:
+                status["method"] = "rss"
+                status["feed_url"] = r.url
+                status["candidates"] = len(items)
+                return items, status
+            status["feed_error"] = "feed je vraćen, ali nije dao parsabilne stavke"
+        except Exception as e:
+            status["feed_error"] = str(e)
+
+    # Ako direktni feed ne uspe, probaj samu kategorijsku stranicu i
+    # autodiscovery/generički HTML parser.
     try:
         page = fetcher.get(source["url"])
         final_source = {**source, "url": page.url}
@@ -556,10 +723,12 @@ def collect_source(fetcher: Fetcher, source: dict, max_items: int) -> tuple[list
         scope = source.get("scope", "section")
 
         for feed_url in feed_candidates(soup, page.url, scope)[:4]:
+            if explicit_feed and clean_url(feed_url) == clean_url(explicit_feed):
+                continue
             try:
                 r = fetcher.get(feed_url)
                 items = parse_feed_bytes(r.content, final_source, max_items)
-                if len(items) >= 2:
+                if items:
                     status["method"] = "rss"
                     status["feed_url"] = r.url
                     status["candidates"] = len(items)
@@ -567,8 +736,6 @@ def collect_source(fetcher: Fetcher, source: dict, max_items: int) -> tuple[list
             except Exception:
                 pass
 
-        # Ako sekcijski RSS ne postoji, koristi baš kategorijsku stranicu,
-        # umesto da "padne" na globalni RSS celog portala.
         items = parse_listing_html(soup, final_source, max_items)
         status["method"] = "html"
         status["candidates"] = len(items)
@@ -576,7 +743,10 @@ def collect_source(fetcher: Fetcher, source: dict, max_items: int) -> tuple[list
 
     except Exception as e:
         status["method"] = "error"
-        status["error"] = str(e)
+        if status["feed_error"]:
+            status["error"] = f'feed: {status["feed_error"]}; stranica: {e}'
+        else:
+            status["error"] = str(e)
         return [], status
 
 
@@ -584,62 +754,96 @@ def collect_source(fetcher: Fetcher, source: dict, max_items: int) -> tuple[list
 # GDELT
 # ---------------------------------------------------------------------------
 
-def fetch_gdelt(fetcher: Fetcher, timespan: str, maxrecords: int) -> tuple[list[Item], dict]:
-    params = {
-        "query": GDELT_QUERY,
-        "mode": "artlist",
-        "format": "JSON",
-        "timespan": timespan,
-        "sort": "datedesc",
-        "maxrecords": maxrecords,
-    }
+
+def fetch_gdelt(
+    fetcher: Fetcher, timespan: str, maxrecords: int
+) -> tuple[list[Item], dict]:
     status = {
         "source": "GDELT:Srbija-radnici",
         "url": GDELT_ENDPOINT,
         "method": "gdelt",
         "feed_url": "",
+        "query_variant": "",
         "candidates": 0,
         "error": "",
     }
-    out: list[Item] = []
 
-    try:
-        r = fetcher.get(GDELT_ENDPOINT, params=params)
+    errors = []
+    variants = [
+        ("primary", GDELT_QUERY, min(maxrecords, 75)),
+        ("fallback", GDELT_FALLBACK_QUERY, min(maxrecords, 50)),
+    ]
+
+    for idx, (label, query, limit) in enumerate(variants):
+        params = {
+            "query": query,
+            "mode": "artlist",
+            "format": "JSON",
+            "timespan": timespan,
+            "sort": "datedesc",
+            "maxrecords": limit,
+        }
+
         try:
-            data = r.json()
-        except Exception:
-            DEBUG_DIR.mkdir(exist_ok=True)
-            (DEBUG_DIR / "gdelt_bad_response.txt").write_text(
-                r.text[:100000], encoding="utf-8", errors="ignore"
-            )
-            raise RuntimeError("GDELT nije vratio JSON")
+            r = fetcher.get(GDELT_ENDPOINT, params=params)
+            body = r.text or ""
+            ctype = (r.headers.get("Content-Type") or "").lower()
 
-        articles = data.get("articles") or []
-        for a in articles:
-            title = a.get("title", "") or ""
-            url = clean_url(a.get("url", "") or "")
-            if not title or not url:
-                continue
-            out.append(Item(
-                title=title,
-                url=url,
-                source=a.get("domain", "") or "GDELT",
-                source_kind="gdelt",
-                summary="",
-                date=a.get("seendate", "") or "",
-                query="Srbija-radnici",
-            ))
-        status["candidates"] = len(articles)
+            try:
+                data = r.json()
+            except Exception:
+                DEBUG_DIR.mkdir(exist_ok=True)
+                debug_text = (
+                    f"URL: {r.url}\n"
+                    f"HTTP: {r.status_code}\n"
+                    f"Content-Type: {r.headers.get('Content-Type', '')}\n\n"
+                    f"{body[:100000]}"
+                )
+                (DEBUG_DIR / f"gdelt_bad_response_{label}.txt").write_text(
+                    debug_text, encoding="utf-8", errors="ignore"
+                )
+                head = re.sub(r"\\s+", " ", body[:260]).strip() or "<prazan odgovor>"
+                raise RuntimeError(
+                    f"nije JSON (HTTP {r.status_code}, Content-Type={ctype or '?'}, početak={head!r})"
+                )
 
-    except Exception as e:
-        status["error"] = str(e)
+            articles = data.get("articles") or []
+            out: list[Item] = []
+            for a in articles:
+                title = a.get("title", "") or ""
+                url = clean_url(a.get("url", "") or "")
+                if not title or not url:
+                    continue
+                out.append(
+                    Item(
+                        title=title,
+                        url=url,
+                        source=a.get("domain", "") or "GDELT",
+                        source_kind="gdelt",
+                        summary="",
+                        date=a.get("seendate", "") or "",
+                        query=label,
+                    )
+                )
 
-    return out, status
+            status["query_variant"] = label
+            status["candidates"] = len(articles)
+            return out, status
+
+        except Exception as e:
+            errors.append(f"{label}: {e}")
+            # Ako je quota/rate-limit, nemoj odmah ponovo da udariš API.
+            if idx == 0:
+                time.sleep(20 if "429" in str(e) else 6)
+
+    status["error"] = " | ".join(errors)
+    return [], status
 
 
 # ---------------------------------------------------------------------------
 # Dedupe / state / output
 # ---------------------------------------------------------------------------
+
 
 def dedupe(items: Iterable[Item]) -> list[Item]:
     seen = set()
@@ -665,16 +869,17 @@ def filter_relevant(items: Iterable[Item]) -> tuple[list[Item], list[dict]]:
             item.reasons = reasons
             accepted.append(item)
         else:
-            rejected.append({
-                "title": item.title,
-                "url": item.url,
-                "source": item.source,
-                "source_kind": item.source_kind,
-                "reject_reason": reject_reason,
-            })
+            rejected.append(
+                {
+                    "title": item.title,
+                    "url": item.url,
+                    "source": item.source,
+                    "source_kind": item.source_kind,
+                    "reject_reason": reject_reason,
+                }
+            )
 
     return accepted, rejected
-
 
 
 def load_hidden_urls() -> set[str]:
@@ -692,6 +897,7 @@ def load_hidden_urls() -> set[str]:
             continue
         hidden.add(clean_url(line))
     return hidden
+
 
 def load_seen() -> set[str]:
     path = STATE_DIR / "seen_urls.json"
@@ -718,7 +924,11 @@ def item_timestamp(item: Item) -> float:
 
     try:
         if re.fullmatch(r"\d{8}T\d{6}Z", value):
-            return datetime.strptime(value, "%Y%m%dT%H%M%SZ").replace(tzinfo=timezone.utc).timestamp()
+            return (
+                datetime.strptime(value, "%Y%m%dT%H%M%SZ")
+                .replace(tzinfo=timezone.utc)
+                .timestamp()
+            )
     except Exception:
         pass
 
@@ -739,7 +949,9 @@ def item_timestamp(item: Item) -> float:
     if m:
         try:
             return datetime(
-                int(m.group(3)), int(m.group(2)), int(m.group(1)),
+                int(m.group(3)),
+                int(m.group(2)),
+                int(m.group(1)),
                 tzinfo=timezone.utc,
             ).timestamp()
         except Exception:
@@ -748,8 +960,9 @@ def item_timestamp(item: Item) -> float:
     return 0.0
 
 
-
-def filter_by_age(items: list[Item], max_age_days: int) -> tuple[list[Item], list[dict]]:
+def filter_by_age(
+    items: list[Item], max_age_days: int
+) -> tuple[list[Item], list[dict]]:
     """
     Odbaci lokalne RSS/HTML članke sa pouzdano parsabilnim datumom starijim od max_age_days.
     Ako datum nedostaje ili ga ne umemo parsirati, članak ostaje da ga relevance filter proceni.
@@ -758,7 +971,10 @@ def filter_by_age(items: list[Item], max_age_days: int) -> tuple[list[Item], lis
     if max_age_days <= 0:
         return items, []
 
-    cutoff = datetime.now(timezone.utc).timestamp() - timedelta(days=max_age_days).total_seconds()
+    cutoff = (
+        datetime.now(timezone.utc).timestamp()
+        - timedelta(days=max_age_days).total_seconds()
+    )
     kept = []
     rejected = []
 
@@ -769,19 +985,27 @@ def filter_by_age(items: list[Item], max_age_days: int) -> tuple[list[Item], lis
 
         ts = item_timestamp(item)
         if ts and ts < cutoff:
-            rejected.append({
-                "title": item.title,
-                "url": item.url,
-                "source": item.source,
-                "source_kind": item.source_kind,
-                "reject_reason": f"starije od {max_age_days} dana",
-            })
+            rejected.append(
+                {
+                    "title": item.title,
+                    "url": item.url,
+                    "source": item.source,
+                    "source_kind": item.source_kind,
+                    "reject_reason": f"starije od {max_age_days} dana",
+                }
+            )
         else:
             kept.append(item)
 
     return kept, rejected
 
-def write_debug(raw_items: list[Item], accepted: list[Item], rejected: list[dict], statuses: list[dict]) -> None:
+
+def write_debug(
+    raw_items: list[Item],
+    accepted: list[Item],
+    rejected: list[dict],
+    statuses: list[dict],
+) -> None:
     DEBUG_DIR.mkdir(exist_ok=True)
 
     with (DEBUG_DIR / "raw_candidates.jsonl").open("w", encoding="utf-8") as f:
@@ -806,7 +1030,9 @@ def write_json(items: list[Item]) -> Path:
     OUT_DIR.mkdir(exist_ok=True)
     path = OUT_DIR / "latest.json"
     payload = {
-        "generated_at": datetime.now(timezone.utc).astimezone().isoformat(timespec="seconds"),
+        "generated_at": datetime.now(timezone.utc)
+        .astimezone()
+        .isoformat(timespec="seconds"),
         "count": len(items),
         "items": [asdict(x) for x in items],
     }
@@ -830,8 +1056,10 @@ def write_html(items: list[Item], statuses: list[dict]) -> Path:
         badges = "".join(f'<span class="tag">{esc(c)}</span>' for c in item.categories)
         reasons = ", ".join(item.reasons)
         new_badge = '<span class="new">NOVO</span>' if item.is_new else ""
-        summary = f'<p class="summary">{esc(item.summary[:420])}</p>' if item.summary else ""
-        date = f' · {esc(item.date)}' if item.date else ""
+        summary = (
+            f'<p class="summary">{esc(item.summary[:420])}</p>' if item.summary else ""
+        )
+        date = f" · {esc(item.date)}" if item.date else ""
 
         cards.append(f"""
         <article class="item">
@@ -852,6 +1080,10 @@ def write_html(items: list[Item], statuses: list[dict]) -> Path:
             detail = f'{s.get("method","")} · {s.get("candidates",0)} kandidata'
             if s.get("feed_url"):
                 detail += f' · {s["feed_url"]}'
+            if s.get("query_variant"):
+                detail += f' · upit: {s["query_variant"]}'
+            if s.get("feed_error") and s.get("method") != "rss":
+                detail += f' · RSS nije uspeo: {s["feed_error"]}'
         status_rows.append(
             f"<tr><td>{esc(s['source'])}</td><td>{state}</td><td>{esc(str(detail))}</td></tr>"
         )
@@ -902,6 +1134,29 @@ def write_html(items: list[Item], statuses: list[dict]) -> Path:
     <tbody>{''.join(status_rows)}</tbody>
   </table>
 </details>
+
+<script>
+(function () {{
+  function sendHeight() {{
+    var h = Math.max(
+      document.body ? document.body.scrollHeight : 0,
+      document.documentElement ? document.documentElement.scrollHeight : 0
+    );
+    if (window.parent && window.parent !== window) {{
+      window.parent.postMessage({{ type: "radnicka-hronika:height", height: h }}, "*");
+    }}
+  }}
+
+  window.addEventListener("load", sendHeight);
+  window.addEventListener("resize", sendHeight);
+  setTimeout(sendHeight, 250);
+  setTimeout(sendHeight, 1200);
+
+  if (window.ResizeObserver && document.documentElement) {{
+    new ResizeObserver(sendHeight).observe(document.documentElement);
+  }}
+}})();
+</script>
 </body>
 </html>
 """
@@ -924,7 +1179,8 @@ SELF_TESTS = [
     ("Srpski poslodavci drže svakog sedmog radnika na određeno vreme", "", True),
     ("Četiri neprijavljena radnika pronašla inspekcija", "", True),
     ("Sindikat: zaposlenima nije isplaćena akontacija za jul", "", True),
-
+    ("Radnici fabrike počeli štrajk glađu zbog neisplaćenih plata", "", True),
+    ("Zaposleni stupili u štrajk glađu zbog otkaza i uslova rada", "", True),
     ("Studentski štrajk nastavljen i danas", "", False),
     ("Kristina odustala od štrajka glađu", "/zabava/", False),
     ("Štrajk grčkih carinika napravio gužve na granici", "", False),
@@ -939,7 +1195,9 @@ SELF_TESTS = [
 def run_self_test() -> int:
     failures = 0
     for title, url, expected in SELF_TESTS:
-        item = Item(title=title, url=f"https://primer.rs{url}", source="test", source_kind="rss")
+        item = Item(
+            title=title, url=f"https://primer.rs{url}", source="test", source_kind="rss"
+        )
         got = bool(classify_item(item)[0])
         mark = "OK" if got == expected else "FAIL"
         print(f"[{mark}] expected={expected:<5} got={got:<5} | {title}")
@@ -951,18 +1209,41 @@ def run_self_test() -> int:
 # Main
 # ---------------------------------------------------------------------------
 
+
 def main() -> int:
     ap = argparse.ArgumentParser(description="Radnička hronika — collector v2")
     ap.add_argument("--timespan", default="14d", help="GDELT period, npr. 6d ili 14d")
-    ap.add_argument("--maxrecords", type=int, default=120, help="GDELT max (do 250)")
-    ap.add_argument("--max-per-source", type=int, default=40, help="Kandidata po lokalnom izvoru")
-    ap.add_argument("--local-days", type=int, default=30, help="Odbaci lokalne članke sa poznatim datumom starijim od N dana; 0=gasi filter")
-    ap.add_argument("--delay", type=float, default=0.45, help="Pauza između lokalnih izvora")
+    ap.add_argument(
+        "--maxrecords",
+        type=int,
+        default=75,
+        help="GDELT max; V4 interno ograničava primarni upit na 75",
+    )
+    ap.add_argument(
+        "--max-per-source", type=int, default=40, help="Kandidata po lokalnom izvoru"
+    )
+    ap.add_argument(
+        "--local-days",
+        type=int,
+        default=30,
+        help="Odbaci lokalne članke sa poznatim datumom starijim od N dana; 0=gasi filter",
+    )
+    ap.add_argument(
+        "--delay", type=float, default=0.45, help="Pauza između lokalnih izvora"
+    )
     ap.add_argument("--no-gdelt", action="store_true", help="Preskoči GDELT")
     ap.add_argument("--only", default="", help="Samo izvori čije ime sadrži ovaj tekst")
-    ap.add_argument("--fresh", action="store_true", help="Označi sve trenutne pogotke kao NOVO")
-    ap.add_argument("--self-test", action="store_true", help="Test filtera bez interneta")
-    ap.add_argument("--user-agent", default=os.environ.get("RADNICKA_HRONIKA_UA", DEFAULT_UA), help="User-Agent sa kontaktom")
+    ap.add_argument(
+        "--fresh", action="store_true", help="Označi sve trenutne pogotke kao NOVO"
+    )
+    ap.add_argument(
+        "--self-test", action="store_true", help="Test filtera bez interneta"
+    )
+    ap.add_argument(
+        "--user-agent",
+        default=os.environ.get("RADNICKA_HRONIKA_UA", DEFAULT_UA),
+        help="User-Agent sa kontaktom",
+    )
     args = ap.parse_args()
 
     if args.self_test:
@@ -1018,13 +1299,15 @@ def main() -> int:
         kept = []
         for item in relevant:
             if clean_url(item.url) in hidden_urls:
-                hidden_rejected.append({
-                    "title": item.title,
-                    "url": item.url,
-                    "source": item.source,
-                    "source_kind": item.source_kind,
-                    "reject_reason": "ručno sakriven URL",
-                })
+                hidden_rejected.append(
+                    {
+                        "title": item.title,
+                        "url": item.url,
+                        "source": item.source,
+                        "source_kind": item.source_kind,
+                        "reject_reason": "ručno sakriven URL",
+                    }
+                )
             else:
                 kept.append(item)
         relevant = kept

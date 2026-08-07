@@ -74,3 +74,10 @@ i stavi stvarnu kontaktnu adresu.
 ## GitHub + WordPress
 
 Za kompletna uputstva vidi `DEPLOY.md`.
+
+## V4 dopune
+
+- radnički štrajk glađu može da prođe ako istovremeno postoji jasan radnički akter i konkretan radni povod;
+- poznati RSS feedovi se pokušavaju pre HTML stranica;
+- GDELT upit je kraći i ima fallback/dijagnostiku;
+- `wordpress-embed.html` uklanja dupli scrollbar pomoću `postMessage` automatskog resize-a.

@@ -8,3 +8,4 @@ out/*
 state/*
 !state/.gitkeep
 !state/seen_urls.json
+radnicka_hronika_v4.patch  echo wordpress-embed.html 

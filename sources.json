@@ -3,25 +3,29 @@
     "name": "RTV Novi Pazar — Ekonomija",
     "url": "https://rtvnp.rs/category/vesti/ekonomija",
     "enabled": true,
-    "scope": "section"
+    "scope": "section",
+    "feed_url": "https://rtvnp.rs/category/vesti/ekonomija/feed"
   },
   {
     "name": "RTV Novi Pazar — Politika",
     "url": "https://rtvnp.rs/category/vesti/politika",
     "enabled": true,
-    "scope": "section"
+    "scope": "section",
+    "feed_url": "https://rtvnp.rs/category/vesti/politika/feed"
   },
   {
     "name": "Kragujevačke — U žiži",
     "url": "https://kragujevacke.rs/kategorija/u-zizi/",
     "enabled": true,
-    "scope": "section"
+    "scope": "section",
+    "feed_url": "https://kragujevacke.rs/kategorija/u-zizi/feed/"
   },
   {
     "name": "Glas Šumadije — Ekonomija",
     "url": "https://www.glassumadije.rs/kategorija/ekonomija/",
     "enabled": true,
-    "scope": "section"
+    "scope": "section",
+    "feed_url": "https://www.glassumadije.rs/kategorija/ekonomija/feed/"
   },
   {
     "name": "Inflacija.me — Ekonomija",
@@ -33,31 +37,36 @@
     "name": "Južne vesti — Ekonomija",
     "url": "https://www.juznevesti.com/ekonomija/",
     "enabled": true,
-    "scope": "section"
+    "scope": "section",
+    "feed_url": "https://www.juznevesti.com/ekonomija/feed/"
   },
   {
     "name": "Južne vesti — Društvo",
     "url": "https://www.juznevesti.com/drustvo/",
     "enabled": true,
-    "scope": "section"
+    "scope": "section",
+    "feed_url": "https://www.juznevesti.com/drustvo/feed/"
   },
   {
     "name": "Radar — Ekonomija",
     "url": "https://radar.nova.rs/ekonomija/",
     "enabled": true,
-    "scope": "section"
+    "scope": "section",
+    "feed_url": "https://radar.nova.rs/ekonomija/feed/"
   },
   {
     "name": "Radar — Društvo",
     "url": "https://radar.nova.rs/drustvo/",
     "enabled": true,
-    "scope": "section"
+    "scope": "section",
+    "feed_url": "https://radar.nova.rs/drustvo/feed/"
   },
   {
     "name": "Mašina",
     "url": "https://www.masina.rs/",
     "enabled": true,
-    "scope": "site"
+    "scope": "site",
+    "feed_url": "https://www.masina.rs/feed/"
   },
   {
     "name": "021 — Biznis i ekonomija",
@@ -69,37 +78,43 @@
     "name": "AgroSmart — Vesti",
     "url": "https://agrosmart.net/category/vesti/",
     "enabled": true,
-    "scope": "section"
+    "scope": "section",
+    "feed_url": "https://agrosmart.net/category/vesti/feed/"
   },
   {
     "name": "OzonPress — Ekonomija",
     "url": "https://www.ozonpress.net/ekonomija/",
     "enabled": true,
-    "scope": "section"
+    "scope": "section",
+    "feed_url": "https://www.ozonpress.net/ekonomija/feed/"
   },
   {
     "name": "Jugpress",
     "url": "https://jugpress.com/",
     "enabled": true,
-    "scope": "site"
+    "scope": "site",
+    "feed_url": "https://jugpress.com/feed/"
   },
   {
     "name": "Užice Online — Vesti",
     "url": "https://uzice.online/vesti/",
     "enabled": true,
-    "scope": "section"
+    "scope": "section",
+    "feed_url": "https://uzice.online/vesti/feed/"
   },
   {
     "name": "Zrenjaninski — Ekonomija",
     "url": "https://zrenjaninski.com/ekonomija/",
     "enabled": true,
-    "scope": "section"
+    "scope": "section",
+    "feed_url": "https://zrenjaninski.com/ekonomija/feed/"
   },
   {
     "name": "N1 — Biznis",
     "url": "https://n1info.rs/biznis/",
     "enabled": true,
-    "scope": "section"
+    "scope": "section",
+    "feed_url": "https://n1info.rs/biznis/feed/"
   },
   {
     "name": "B92 — Biz",
@@ -111,36 +126,42 @@
     "name": "Nova — Biznis",
     "url": "https://nova.rs/vesti/biznis/",
     "enabled": true,
-    "scope": "section"
+    "scope": "section",
+    "feed_url": "https://nova.rs/vesti/biznis/feed/"
   },
   {
     "name": "Nova — Društvo",
     "url": "https://nova.rs/vesti/drustvo/",
     "enabled": true,
-    "scope": "section"
+    "scope": "section",
+    "feed_url": "https://nova.rs/vesti/drustvo/feed/"
   },
   {
     "name": "Danas — Ekonomija",
     "url": "https://www.danas.rs/rubrika/vesti/ekonomija/",
     "enabled": true,
-    "scope": "section"
+    "scope": "section",
+    "feed_url": "https://www.danas.rs/rubrika/vesti/ekonomija/feed/"
   },
   {
     "name": "Danas — Društvo",
     "url": "https://www.danas.rs/rubrika/vesti/drustvo/",
     "enabled": true,
-    "scope": "section"
+    "scope": "section",
+    "feed_url": "https://www.danas.rs/rubrika/vesti/drustvo/feed/"
   },
   {
     "name": "Biznis.rs — Vesti",
     "url": "https://biznis.rs/vesti/",
     "enabled": true,
-    "scope": "section"
+    "scope": "section",
+    "feed_url": "https://biznis.rs/vesti/feed/"
   },
   {
     "name": "Vesnik017 — Privreda",
     "url": "https://vesnik017.rs/vesti/privreda/",
     "enabled": true,
-    "scope": "section"
+    "scope": "section",
+    "feed_url": "https://vesnik017.rs/vesti/privreda/feed/"
   }
 ]

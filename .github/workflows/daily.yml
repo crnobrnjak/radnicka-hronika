@@ -3,6 +3,17 @@ name: Radnička hronika
 on:
   workflow_dispatch:
 
+  # Kada ručno menjaš kod/izvore i uradiš git push, odmah napravi novi deployment.
+  # state/seen_urls.json nije u paths listi, pa botov commit state-a neće napraviti petlju.
+  push:
+    branches: ["main"]
+    paths:
+      - "main.py"
+      - "sources.json"
+      - "hidden_urls.txt"
+      - "requirements.txt"
+      - ".github/workflows/daily.yml"
+
   schedule:
     - cron: "35 7 * * *"
       timezone: "Europe/Belgrade"
@@ -41,7 +52,16 @@ jobs:
         env:
           RADNICKA_HRONIKA_UA: "RadnickaHronika/0.3 (GitHub Actions)"
         run: |
-          python main.py --timespan 14d --local-days 30 --maxrecords 120
+          python main.py --timespan 14d --local-days 30 --maxrecords 75
+
+      - name: Sačuvaj debug fajlove
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: radnicka-hronika-debug
+          path: debug/
+          retention-days: 7
+          if-no-files-found: ignore
 
       - name: Pripremi javnu stranicu
         run: |

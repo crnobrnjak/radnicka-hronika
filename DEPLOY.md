@@ -184,3 +184,35 @@ Ako RSS/HTML članak ima parsabilan datum i stariji je od 30 dana, odbacuje se.
 Ako datum nedostaje, članak se ne odbacuje samo zbog toga.
 
 GDELT i dalje koristi svoj `--timespan 14d`.
+
+## K. V4: bez duplog scrollbara
+
+Umesto starog iframe HTML-a koristi sadržaj iz `wordpress-embed.html`.
+GitHub Pages strana sada preko `postMessage` javlja svoju visinu WordPress stranici,
+a WordPress automatski podesi visinu iframe-a. Tako ostaje samo glavni scrollbar sajta.
+
+## L. V4: direktni RSS pre kategorijske stranice
+
+Za izvore za koje već znamo tačan RSS, `sources.json` sada ima `feed_url`.
+Collector prvo pokušava taj feed, pa tek onda kategorijsku stranicu. Ovo pomaže kod
+sajtova koji vraćaju HTTP 403 GitHub Actions runneru na HTML stranici, ali im RSS radi.
+
+## M. V4: GDELT dijagnostika
+
+GDELT upit je skraćen i `maxrecords` smanjen na 75. Ako primarni upit ne uspe,
+collector posle pauze pokušava kraći fallback. Ako GDELT vrati tekst/HTML umesto
+JSON-a, početak stvarnog odgovora se sada beleži u `source_status.json`, a ceo
+odgovor u `debug/gdelt_bad_response_primary.txt` ili `..._fallback.txt`.
+
+## N. Debug sa GitHub Actions-a
+
+Svaki workflow run sada čuva `debug/` kao GitHub Actions artifact sedam dana.
+Ako GDELT ili neki izvor pravi čudan problem, otvori konkretan Actions run i pri dnu
+stranice preuzmi artifact `radnicka-hronika-debug`.
+
+## O. Git push sada odmah deployuje
+
+Workflow V4 sluša i `push` na granu `main` kada menjaš kod, izvore ili workflow.
+Zato posle lokalnog `git commit` + `git push origin main` ne moraš ručno da klikćeš
+Run workflow. Dnevni raspored i dalje ostaje aktivan. Botov commit `state/seen_urls.json`
+nije među `paths`, pa ne izaziva beskonačnu petlju.
