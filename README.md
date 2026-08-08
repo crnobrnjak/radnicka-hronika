@@ -1,27 +1,21 @@
-# Radnička hronika — V2
+# Radnička hronika
 
-V2 je namerno stroža od V1. Cilj nije da svaki dan proizvede mnogo linkova,
-nego da ono što prikaže uglavnom zaista bude radničko pitanje u Srbiji.
+Automatski pregled vesti o položaju radnika u Srbiji.
 
-## Glavne promene
+Program sakuplja članke iz odabranih domaćih medija preko RSS-a ili kategorijskih stranica, uz dopunski GDELT upit. Zatim determinističkim pravilima izdvaja teme kao što su:
 
-1. `sourcecountry:serbia` više se ne tretira kao dokaz da se događaj desio u Srbiji.
-   GDELT upit sada traži i srpski geografski kontekst.
-2. Samo jedan GDELT poziv po prolazu, što smanjuje HTTP 429.
-3. Štrajk glađu se eksplicitno odbacuje.
-4. Očigledne strane teme (npr. Grčka/Rumunija/Lufthansa) se odbacuju po naslovu.
-5. "Radnik stradao" nije automatski povreda/smrt na radu. Potreban je kontekst
-   radnog mesta ili eksplicitno "na radu".
-6. "Otkaz" nije automatski otpuštanje radnika. Potreban je kontekst radnog odnosa.
-7. Sekcijski URL više ne pada automatski na globalni `/feed/` portala.
-   Ako sekcijski RSS ne postoji, koristi baš kategorijsku HTML stranicu.
-8. Dodati su izrazi za akontacije, "nije isplaćena", "bez plate", rad na određeno,
-   neprijavljene radnike itd.
-9. `debug/rejected.jsonl` pokazuje šta je odbačeno i zašto.
+- štrajkovi i radnički protesti;
+- otkazi i gubitak radnih mesta;
+- neisplaćene ili umanjene zarade;
+- mobing i povrede radnih prava;
+- loši i nebezbedni uslovi rada;
+- neprijavljen rad;
+- povrede i smrt na radu;
+- sindikalna pitanja.
 
-## Pokretanje
+Filter normalizuje latinicu i ćirilicu i koristi osnove reči i kontekstualne regex obrasce, a ne samo doslovno poklapanje ključnih reči. Nema AI/ML klasifikacije.
 
-Ako već imaš `.venv` iz V1, možeš napraviti novi ili koristiti postojeći.
+## Lokalno pokretanje
 
 ```bash
 python -m pip install -r requirements.txt
@@ -29,55 +23,18 @@ python main.py --self-test
 python main.py --fresh
 ```
 
-Otvori:
-
-```text
-out/report.html
-```
-
-Za brzi test samo direktnih izvora:
+Bez GDELT-a:
 
 ```bash
 python main.py --fresh --no-gdelt
 ```
 
-Samo jedan izvor:
+## Glavni fajlovi
 
-```bash
-python main.py --fresh --no-gdelt --only "Glas Šumadije"
-```
+- `main.py` — sakupljanje i filtriranje
+- `sources.json` — praćeni izvori
+- `hidden_urls.txt` — ručno skriveni članci
+- `debug/` — kandidati, odbačeni članci i status izvora
+- `state/seen_urls.json` — već viđeni URL-ovi
 
-## Šta da pošalješ ako nešto opet izgleda čudno
-
-Najkorisniji su:
-
-```text
-out/report.html
-debug/source_status.json
-debug/rejected.jsonl
-debug/raw_candidates.jsonl
-```
-
-`rejected.jsonl` je nov u V2: uz svaki odbačeni naslov piše i razlog.
-
-## Važno
-
-Pre prvog pravog pokretanja promeni u `main.py`:
-
-```python
-DEFAULT_UA = "RadnickaHronika/0.2 (+contact: promeni-me@example.com)"
-```
-
-i stavi stvarnu kontaktnu adresu.
-
-
-## GitHub + WordPress
-
-Za kompletna uputstva vidi `DEPLOY.md`.
-
-## V4 dopune
-
-- radnički štrajk glađu može da prođe ako istovremeno postoji jasan radnički akter i konkretan radni povod;
-- poznati RSS feedovi se pokušavaju pre HTML stranica;
-- GDELT upit je kraći i ima fallback/dijagnostiku;
-- `wordpress-embed.html` uklanja dupli scrollbar pomoću `postMessage` automatskog resize-a.
+GitHub Actions pokreće collector jednom dnevno i objavljuje rezultat preko GitHub Pages.

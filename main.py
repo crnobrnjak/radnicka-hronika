@@ -48,9 +48,8 @@ SOURCES_PATH = BASE_DIR / "sources.json"
 HIDDEN_URLS_PATH = BASE_DIR / "hidden_urls.txt"
 
 # GDELT sourcecountry znači "medij iz Srbije", a ne "događaj u Srbiji".
-# V4 zato koristi KRATAK upit: jedan OR blok + obavezno Serbia + sourcecountry.
-# Prethodni dugački upit je povremeno vraćao tekst/HTML umesto JSON-a, a GDELT
-# je i zvanično rate-limited. Ako primarni upit ne uspe, probamo još kraći fallback.
+# GDELT DOC API traži najmanje 5 sekundi između zahteva.
+# Zato GDELT ima sopstveni pacing/retry i ne koristi generički Fetcher.get().
 GDELT_QUERY = (
     '(strike OR layoffs OR "job cuts" OR "unpaid wages" OR "workers rights" '
     'OR "working conditions" OR "workplace injury" OR "work accident" '
@@ -758,6 +757,17 @@ def collect_source(
 def fetch_gdelt(
     fetcher: Fetcher, timespan: str, maxrecords: int
 ) -> tuple[list[Item], dict]:
+    """
+    GDELT DOC API traži najmanje 5 sekundi između zahteva.
+
+    Zato ovde ne koristimo Fetcher.get(), čiji je generički retry namenjen
+    običnim sajtovima i može biti brži od GDELT limita.
+
+    - između dva GDELT zahteva držimo najmanje 6 sekundi;
+    - na HTTP 429 čekamo 7 sekundi i isti zahtev probamo još jednom;
+    - ako i drugi pokušaj dobije 429, odustajemo od GDELT-a za taj run;
+    - fallback koristimo samo kod drugih grešaka / nevalidnog JSON odgovora.
+    """
     status = {
         "source": "GDELT:Srbija-radnici",
         "url": GDELT_ENDPOINT,
@@ -768,13 +778,86 @@ def fetch_gdelt(
         "error": "",
     }
 
-    errors = []
+    min_interval = 6.0
+    retry_after_429 = 7.0
+    last_request_at: float | None = None
+
+    def paced_request(params: dict) -> requests.Response:
+        nonlocal last_request_at
+
+        if last_request_at is not None:
+            elapsed = time.monotonic() - last_request_at
+            if elapsed < min_interval:
+                time.sleep(min_interval - elapsed)
+
+        r = fetcher.session.get(
+            GDELT_ENDPOINT,
+            params=params,
+            timeout=fetcher.timeout,
+            allow_redirects=True,
+        )
+        last_request_at = time.monotonic()
+        return r
+
+    def parse_response(r: requests.Response, label: str) -> list[Item]:
+        body = r.text or ""
+        ctype = (r.headers.get("Content-Type") or "").lower()
+
+        if r.status_code != 200:
+            head = re.sub(r"\s+", " ", body[:260]).strip() or "<prazan odgovor>"
+            raise RuntimeError(f"HTTP {r.status_code}; početak={head!r}")
+
+        try:
+            data = r.json()
+        except Exception:
+            DEBUG_DIR.mkdir(exist_ok=True)
+            debug_text = (
+                f"URL: {r.url}\n"
+                f"HTTP: {r.status_code}\n"
+                f"Content-Type: {r.headers.get('Content-Type', '')}\n\n"
+                f"{body[:100000]}"
+            )
+            (DEBUG_DIR / f"gdelt_bad_response_{label}.txt").write_text(
+                debug_text, encoding="utf-8", errors="ignore"
+            )
+            head = re.sub(r"\s+", " ", body[:260]).strip() or "<prazan odgovor>"
+            raise RuntimeError(
+                f"nije JSON (HTTP {r.status_code}, "
+                f"Content-Type={ctype or '?'}, početak={head!r})"
+            )
+
+        articles = data.get("articles") or []
+        out: list[Item] = []
+
+        for a in articles:
+            title = a.get("title", "") or ""
+            url = clean_url(a.get("url", "") or "")
+            if not title or not url:
+                continue
+
+            out.append(
+                Item(
+                    title=title,
+                    url=url,
+                    source=a.get("domain", "") or "GDELT",
+                    source_kind="gdelt",
+                    summary="",
+                    date=a.get("seendate", "") or "",
+                    query=label,
+                )
+            )
+
+        status["query_variant"] = label
+        status["candidates"] = len(articles)
+        return out
+
     variants = [
         ("primary", GDELT_QUERY, min(maxrecords, 75)),
         ("fallback", GDELT_FALLBACK_QUERY, min(maxrecords, 50)),
     ]
+    errors = []
 
-    for idx, (label, query, limit) in enumerate(variants):
+    for label, query, limit in variants:
         params = {
             "query": query,
             "mode": "artlist",
@@ -785,56 +868,32 @@ def fetch_gdelt(
         }
 
         try:
-            r = fetcher.get(GDELT_ENDPOINT, params=params)
-            body = r.text or ""
-            ctype = (r.headers.get("Content-Type") or "").lower()
+            r = paced_request(params)
 
-            try:
-                data = r.json()
-            except Exception:
-                DEBUG_DIR.mkdir(exist_ok=True)
-                debug_text = (
-                    f"URL: {r.url}\n"
-                    f"HTTP: {r.status_code}\n"
-                    f"Content-Type: {r.headers.get('Content-Type', '')}\n\n"
-                    f"{body[:100000]}"
-                )
-                (DEBUG_DIR / f"gdelt_bad_response_{label}.txt").write_text(
-                    debug_text, encoding="utf-8", errors="ignore"
-                )
-                head = re.sub(r"\\s+", " ", body[:260]).strip() or "<prazan odgovor>"
-                raise RuntimeError(
-                    f"nije JSON (HTTP {r.status_code}, Content-Type={ctype or '?'}, početak={head!r})"
-                )
+            if r.status_code == 429:
+                first_message = re.sub(r"\s+", " ", (r.text or "")[:260]).strip()
 
-            articles = data.get("articles") or []
-            out: list[Item] = []
-            for a in articles:
-                title = a.get("title", "") or ""
-                url = clean_url(a.get("url", "") or "")
-                if not title or not url:
-                    continue
-                out.append(
-                    Item(
-                        title=title,
-                        url=url,
-                        source=a.get("domain", "") or "GDELT",
-                        source_kind="gdelt",
-                        summary="",
-                        date=a.get("seendate", "") or "",
-                        query=label,
+                time.sleep(retry_after_429)
+                r = paced_request(params)
+
+                if r.status_code == 429:
+                    second_message = re.sub(
+                        r"\s+", " ", (r.text or "")[:260]
+                    ).strip()
+                    status["error"] = (
+                        f"{label}: HTTP 429 i posle ponovnog pokušaja; "
+                        f"GDELT poruka="
+                        f"{(second_message or first_message or '<prazno>')!r}"
                     )
-                )
+                    return [], status
 
-            status["query_variant"] = label
-            status["candidates"] = len(articles)
-            return out, status
+            return parse_response(r, label)
 
         except Exception as e:
             errors.append(f"{label}: {e}")
-            # Ako je quota/rate-limit, nemoj odmah ponovo da udariš API.
-            if idx == 0:
-                time.sleep(20 if "429" in str(e) else 6)
+            # Sledeći variant, ako ga bude, paced_request će sačekati
+            # da prođe najmanje 6 sekundi od prethodnog GDELT zahteva.
+            continue
 
     status["error"] = " | ".join(errors)
     return [], status
