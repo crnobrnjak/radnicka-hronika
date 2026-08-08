@@ -887,7 +887,8 @@ def fetch_gdelt(
                     )
                     return [], status
 
-            return parse_response(r, label)
+            items = parse_response(r, label)
+            return items, status
 
         except Exception as e:
             errors.append(f"{label}: {e}")
