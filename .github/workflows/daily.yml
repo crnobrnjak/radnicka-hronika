@@ -52,7 +52,7 @@ jobs:
         env:
           RADNICKA_HRONIKA_UA: "RadnickaHronika/0.3 (GitHub Actions)"
         run: |
-          python main.py --timespan 14d --local-days 30 --maxrecords 75
+          python main.py --timespan 14d --local-days 30 --maxrecords 75 --no-gdelt
 
       - name: Sačuvaj debug fajlove
         if: always()
