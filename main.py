@@ -157,30 +157,54 @@ NON_LABOR_URL_PARTS = (
     "/planeta/",
 )
 
-# Ako je naslov očigledno o inostranstvu, odbaci ga. Lista nije zamišljena
-# kao kompletna geografija sveta — samo sprečava čest šum.
-FOREIGN_TITLE_RX = re.compile(
+# Strani kontekst proveravamo u naslovu + sažetku, ne samo u naslovu.
+# To hvata npr. naslov "Uber otpušta..." čiji opis kaže "američka kompanija".
+FOREIGN_CONTEXT_RX = re.compile(
     r"\b("
     r"grck\w*|rumun\w*|madjar\w*|nemack\w*|kanad\w*|kong\w*|"
     r"francusk\w*|italij\w*|spanij\w*|americ\w*|kinesk\w*|"
     r"palestin\w*|izrael\w*|ukrajin\w*|rusij\w*|hrvatsk\w*|"
-    r"bugarsk\w*|austrij\w*|svajcarsk\w*|britan\w*|englesk\w*|"
-    r"poljsk\w*|sloven\w*|lufthanz\w*|vestdzet\w*|audi\w*|"
-    r"evzoni\w*|paks\w*"
-    r")\b|crna gora|severna makedon",
+    r"bosn\w*|hercegovin\w*|bugarsk\w*|austrij\w*|svajcarsk\w*|"
+    r"britan\w*|englesk\w*|poljsk\w*|sloven\w*|svedsk\w*|"
+    r"dansk\w*|norvesk\w*|finsk\w*|holand\w*|belgij\w*|"
+    r"cesk\w*|slovack\w*|portugal\w*|irsk\w*|"
+    r"nujork\w*|san francisk\w*|barselon\w*|stokolm\w*|"
+    r"lufthanz\w*|vestdzet\w*|evzoni\w*|paks\w*"
+    r")\b|crna gora|severna makedon|sjedinjen\w+\s+americ\w+\s+drzav",
     re.I,
 )
 
-# Ako naslov istovremeno eksplicitno govori o Srbiji, ne odbacuj samo zato
-# što pominje stranu državu/kompaniju.
-SERBIA_TITLE_RX = re.compile(
+# Strani marker se ne odbacuje ako tekst jasno smešta radničko pitanje u Srbiju.
+# Ne koristimo samo reč "Srbija": "Er Srbija ... štrajk u Barseloni" nije domaći štrajk.
+SERBIA_CONTEXT_RX = re.compile(
     r"\b("
-    r"srbij\w*|beograd\w*|novi sad\w*|kragujev\w*|kraljev\w*|"
+    r"beograd\w*|novi sad\w*|nis\w*|kragujev\w*|kraljev\w*|"
     r"cacak\w*|uzic\w*|zrenjan\w*|subotic\w*|leskov\w*|vranj\w*|"
     r"prokuplj\w*|novi pazar\w*|smederev\w*|pancev\w*|krusev\w*|"
     r"sabac\w*|valjev\w*|zajecar\w*|jagodin\w*|sombor\w*|"
-    r"kikind\w*|vrsac\w*|loznic\w*|pozarev\w*|batajnic\w*"
-    r")\b",
+    r"kikind\w*|vrsac\w*|loznic\w*|pozarev\w*|batajnic\w*|"
+    r"cajetin\w*|pozeg\w*|arilj\w*|bajin\w*|priboj\w*|prijepolj\w*|"
+    r"sjenic\w*|vojvodin\w*|sumadij\w*|zlatibor\w*|kolubar\w*"
+    r")\b|"
+    r"\bu srbij\w*|\biz srbij\w*|\bvlada srbije\b|"
+    r"\b(radni[ck]|zaposlen|sindikat|poslodav)\w*.{0,35}\bsrbij\w*|"
+    r"\bsrpsk\w*.{0,25}\b(radni[ck]|zaposlen|fabrik|preduzec|sindikat)\w*",
+    re.I,
+)
+
+# Rubrike čiji URL već eksplicitno kaže da članak nije domaća vest.
+FOREIGN_URL_PARTS = (
+    "/vesti/eu/",
+    "/vesti/svet/",
+    "/vesti/region/",
+)
+
+# Berzanska/investiciona "zarada" nije zarada radnika.
+# Ne odbacujemo samo reč "akcije", jer ona može značiti i radničke akcije.
+MARKET_PROMO_RX = re.compile(
+    r"\bakcij\w*.{0,60}\b(skoc|porast|pao|pala|pad|cen|vredn|berz|invest)\w*|"
+    r"\b(skoc|porast|pao|pala|pad|cen|vredn|berz|invest)\w*.{0,60}\bakcij\w*|"
+    r"\bkript\w*.{0,45}\b(invest|trgov|zarad)\w*",
     re.I,
 )
 
@@ -218,7 +242,20 @@ LABOR_ACTOR_RX = re.compile(
 )
 
 WORKSITE_RX = re.compile(
-    r"\b(gradilist|fabrik|pogon|rudnik|hala|masin|radno mesto|tokom rada|na poslu)\w*",
+    r"\b(gradilist|fabrik|pogon|rudnik|rudarsk|kop|hala|masin|dizalic|"
+    r"utovar|putar)\w*|"
+    r"\b(radno mesto|tokom rada|na poslu|na radu)\b|"
+    r"\bmontazn\w*.{0,12}\bplac\w*|"
+    r"\brekonstrukcij\w*.{0,24}\b(put|ulic)\w*|"
+    r"\bradov\w*.{0,20}\b(put|ulic|gradilist|kop)\w*|"
+    r"\bna\s+koje[mj]\s+su\s+radil\w*|"
+    r"\bradil\w*.{0,24}\b(put|ulic|gradilist|kop)\w*",
+    re.I,
+)
+
+WORKER_HARM_RX = re.compile(
+    r"\b(radni[ck]|zaposlen)\w*.{0,80}\b(povred|pogin|strad|premin)\w*|"
+    r"\b(povred|pogin|strad|premin)\w*.{0,80}\b(radni[ck]|zaposlen)\w*",
     re.I,
 )
 
@@ -263,8 +300,14 @@ def hard_reject(item: Item) -> str:
     if ENTERTAINMENT_SPORT_RX.search(text):
         return "sport/estrada"
 
-    if FOREIGN_TITLE_RX.search(title) and not SERBIA_TITLE_RX.search(title):
-        return "očigledno inostranstvo"
+    if any(part in url for part in FOREIGN_URL_PARTS):
+        return "strana/regionalna rubrika"
+
+    if MARKET_PROMO_RX.search(title):
+        return "berza/investiciona promocija"
+
+    if FOREIGN_CONTEXT_RX.search(text) and not SERBIA_CONTEXT_RX.search(text):
+        return "radničko pitanje van Srbije"
 
     return ""
 
@@ -374,15 +417,27 @@ def classify_item(item: Item) -> tuple[list[str], list[str], str]:
     ):
         add("Radnički protest", "radnici/zaposleni protestuju")
 
-    # 6) Otkazi — "otpustio oca/trenera" više ne prolazi
-    layoff = re.search(
-        r"\botpust\w*|\botkaz\w*|\btehnolosk\w+\s+visak\b|"
-        r"\bukidanj\w*.{0,25}\bradn\w+\s+mest\w*|"
-        r"\bgasen\w*.{0,25}\bradn\w+\s+mest\w*",
+    # 6) Otkazi.
+    # "Otkazivanje motora/leta/skupa" više nije dovoljno samo zato što se
+    # u opisu negde pojavljuje "kompanija".
+    strong_layoff = re.search(
+        r"\botpust\w*|\btehnolosk\w+\s+visak\b|"
+        r"\bukidanj\w*.{0,30}\bradn\w+\s+mest\w*|"
+        r"\bgasen\w*.{0,30}\bradn\w+\s+mest\w*|"
+        r"\bosta\w*.{0,22}\bbez\s+posla\b",
         text,
     )
-    if layoff and LABOR_ACTOR_RX.search(text):
-        add("Otkazi / radna mesta", "otkaz/otpuštanje + radni odnos")
+    employment_otkaz = re.search(
+        r"\b(radni[ck]|zaposlen|sindikat)\w*.{0,60}\botkaz\w*|"
+        r"\botkaz\w*.{0,60}\b(radni[ck]|zaposlen|sindikat)\w*|"
+        r"\b(dobio|dobila|dobili|dobile|urucen|urucena|uruceni)\w*.{0,25}\botkaz\w*|"
+        r"\botkaz\w*.{0,35}\b(ugovor\w*\s+o\s+radu|radni odnos)\b",
+        text,
+    )
+    if strong_layoff and LABOR_ACTOR_RX.search(text):
+        add("Otkazi / radna mesta", "otpuštanje/gubitak posla + radni odnos")
+    elif employment_otkaz:
+        add("Otkazi / radna mesta", "otkaz + zaposleni/radnik/sindikat")
 
     # 7) Povrede/smrti: eksplicitno "na radu" je dovoljno.
     if re.search(r"\bpovred\w*.{0,25}\bna radu\b|\bnesrec\w+\s+na\s+radu\b", text):
@@ -545,7 +600,9 @@ def plausible_article_link(title: str, url: str, source_url: str) -> bool:
 
 
 def section_feed_guess(page_url: str) -> str:
-    return page_url.rstrip("/") + "/feed/"
+    p = urlparse(page_url)
+    path = p.path.rstrip("/") + "/feed/"
+    return urlunparse((p.scheme, p.netloc, path, "", "", ""))
 
 
 def root_feed_guess(page_url: str) -> str:
@@ -683,6 +740,82 @@ def parse_listing_html(soup: BeautifulSoup, source: dict, max_items: int) -> lis
     return found[:max_items]
 
 
+def _find_article_body_json(obj) -> str:
+    if isinstance(obj, dict):
+        body = obj.get("articleBody")
+        if isinstance(body, str) and len(body.strip()) > 80:
+            return body.strip()
+        for value in obj.values():
+            found = _find_article_body_json(value)
+            if found:
+                return found
+    elif isinstance(obj, list):
+        for value in obj:
+            found = _find_article_body_json(value)
+            if found:
+                return found
+    return ""
+
+
+def extract_article_body(page_text: str) -> str:
+    """Izvuci tekst članka iz JSON-LD articleBody ili <article>/<main>."""
+    soup = BeautifulSoup(page_text, "html.parser")
+
+    for script in soup.find_all("script", attrs={"type": "application/ld+json"}):
+        raw = script.string or script.get_text("", strip=True)
+        if not raw:
+            continue
+        try:
+            data = json.loads(raw)
+        except Exception:
+            continue
+        body = _find_article_body_json(data)
+        if body:
+            return re.sub(r"\s+", " ", body).strip()[:5000]
+
+    node = soup.find("article") or soup.find("main")
+    if node:
+        for bad in node.find_all(["script", "style", "nav", "aside", "footer"]):
+            bad.decompose()
+        return re.sub(r"\s+", " ", node.get_text(" ", strip=True)).strip()[:5000]
+
+    return ""
+
+
+def enrich_work_accident_candidates(
+    fetcher: Fetcher, items: list[Item], max_fetches: int = 12
+) -> None:
+    """
+    Ako naslov/RSS opis kaže da je radnik poginuo ili povređen, ali ne kaže
+    dovoljno da znamo da li se to desilo tokom rada, pročitaj samo taj članak.
+    """
+    fetched = 0
+
+    for item in items:
+        if fetched >= max_fetches:
+            break
+
+        current = norm_text(f"{item.title} {item.summary}")
+        if not WORKER_HARM_RX.search(current):
+            continue
+        if WORKSITE_RX.search(current) or VIOLENCE_RX.search(current):
+            continue
+
+        try:
+            r = fetcher.get(item.url)
+            body = extract_article_body(r.text)
+            if not body:
+                continue
+            item.summary = re.sub(
+                r"\s+", " ", f"{item.summary} {body}"
+            ).strip()[:5000]
+            fetched += 1
+            time.sleep(0.15)
+        except Exception:
+            # Ovo je pomoćni korak; neuspeh ne ruši ceo collector.
+            continue
+
+
 def collect_source(
     fetcher: Fetcher, source: dict, max_items: int
 ) -> tuple[list[Item], dict]:
@@ -691,14 +824,15 @@ def collect_source(
         "url": source["url"],
         "method": "",
         "feed_url": "",
+        "fallback_url": "",
         "feed_error": "",
         "candidates": 0,
         "error": "",
     }
 
-    # V4: ako u sources.json već znamo tačan feed, probaj NJEGA PRE landing
-    # stranice. Ovo je bitno za sajtove koji GitHub Actions runneru vraćaju
-    # 403 na kategorijskoj stranici, iako im RSS normalno postoji.
+    errors = []
+
+    # Ako znamo tačan feed, probaj njega pre landing stranice.
     explicit_feed = source.get("feed_url", "").strip()
     if explicit_feed:
         try:
@@ -710,11 +844,12 @@ def collect_source(
                 status["candidates"] = len(items)
                 return items, status
             status["feed_error"] = "feed je vraćen, ali nije dao parsabilne stavke"
+            errors.append(f'feed: {status["feed_error"]}')
         except Exception as e:
             status["feed_error"] = str(e)
+            errors.append(f"feed: {e}")
 
-    # Ako direktni feed ne uspe, probaj samu kategorijsku stranicu i
-    # autodiscovery/generički HTML parser.
+    # Zatim kategorijska/listing stranica.
     try:
         page = fetcher.get(source["url"])
         final_source = {**source, "url": page.url}
@@ -736,17 +871,46 @@ def collect_source(
                 pass
 
         items = parse_listing_html(soup, final_source, max_items)
-        status["method"] = "html"
-        status["candidates"] = len(items)
-        return items, status
+        if items or not source.get("fallback_url"):
+            status["method"] = "html"
+            status["candidates"] = len(items)
+            return items, status
+
+        errors.append("stranica je vraćena, ali parser nije našao kandidate")
 
     except Exception as e:
-        status["method"] = "error"
-        if status["feed_error"]:
-            status["error"] = f'feed: {status["feed_error"]}; stranica: {e}'
-        else:
-            status["error"] = str(e)
-        return [], status
+        errors.append(f"stranica: {e}")
+
+    # Neki mali sajtovi uporno blokiraju GitHub datacenter IP (403).
+    # Za njih original ostaje prvi izbor, a Naslovi.net je rezervni izvor.
+    fallback_url = source.get("fallback_url", "").strip()
+    if fallback_url:
+        try:
+            page = fetcher.get(fallback_url)
+            mirror_source = {**source, "url": page.url}
+            soup = BeautifulSoup(page.text, "html.parser")
+            fallback_max = int(source.get("fallback_max_items", 12))
+            items = parse_listing_html(
+                soup, mirror_source, min(max_items, fallback_max)
+            )
+
+            for item in items:
+                item.source_kind = "mirror"
+
+            if items:
+                status["method"] = "mirror"
+                status["fallback_url"] = page.url
+                status["candidates"] = len(items)
+                status["error"] = ""
+                return items, status
+
+            errors.append("fallback je dostupan, ali nema parsabilnih kandidata")
+        except Exception as e:
+            errors.append(f"fallback: {e}")
+
+    status["method"] = "error"
+    status["error"] = "; ".join(errors) or "izvor nije dostupan"
+    return [], status
 
 
 # ---------------------------------------------------------------------------
@@ -1142,7 +1306,9 @@ def write_html(items: list[Item], statuses: list[dict]) -> Path:
                 detail += f' · {s["feed_url"]}'
             if s.get("query_variant"):
                 detail += f' · upit: {s["query_variant"]}'
-            if s.get("feed_error") and s.get("method") != "rss":
+            if s.get("fallback_url"):
+                detail += f' · fallback: {s["fallback_url"]}'
+            if s.get("feed_error") and s.get("method") not in ("rss", "mirror"):
                 detail += f' · RSS nije uspeo: {s["feed_error"]}'
         status_rows.append(
             f"<tr><td>{esc(s['source'])}</td><td>{state}</td><td>{esc(str(detail))}</td></tr>"
@@ -1249,14 +1415,61 @@ SELF_TESTS = [
     ("Cicipas žali što ranije nije otpustio oca", "/sport/", False),
     ("Utakmica otkazana zbog kiše", "/sport/", False),
     ("Cena nafte porasla dva odsto", "", False),
+    ("EPS: Radnik poginuo u Kolubari - pukla sajla dizalice prilikom utovara", "", True),
+    (
+        "Dva radnika poginula kada je kamion naleteo na njih na putu Kljajićevo - Sivac",
+        "",
+        True,
+        "Radnici su se kretali putem na kojem su radili.",
+    ),
+    (
+        "Uber otpušta 3.300 zaposlenih",
+        "",
+        False,
+        "Američka kompanija Uber smanjuje broj zaposlenih u Njujorku i San Francisku.",
+    ),
+    (
+        "Volkswagenov plan za otpuštanje 100.000 zaposlenih pod velikom osudom",
+        "/vesti/eu/volkswagen-otpustanja/",
+        False,
+    ),
+    ("Najduži štrajk u Švedskoj: Tesla i IF Metall", "", False),
+    (
+        "Er Srbija putnicima za Barselonu preporučuje samo ručni prtljag jer je na tamošnjem aerodromu štrajk",
+        "",
+        False,
+    ),
+    (
+        "SAD pokreću istragu o milion vozila Dženeral motorsa zbog otkazivanja motora",
+        "",
+        False,
+        "Američke vlasti istražuju kvarove i otkazivanje motora na vozilima.",
+    ),
+    (
+        "Akcije Moderne skočile 177 odsto u jednom danu: Još nije kasno da i Vi zaradite",
+        "",
+        False,
+        "Cena akcije raste, investitori prate berzu.",
+    ),
+
 ]
 
 
 def run_self_test() -> int:
     failures = 0
-    for title, url, expected in SELF_TESTS:
+    for case in SELF_TESTS:
+        if len(case) == 3:
+            title, url, expected = case
+            summary = ""
+        else:
+            title, url, expected, summary = case
+
         item = Item(
-            title=title, url=f"https://primer.rs{url}", source="test", source_kind="rss"
+            title=title,
+            url=f"https://primer.rs{url}",
+            source="test",
+            source_kind="rss",
+            summary=summary,
         )
         got = bool(classify_item(item)[0])
         mark = "OK" if got == expected else "FAIL"
@@ -1348,6 +1561,7 @@ def main() -> int:
         time.sleep(max(0, args.delay))
 
     raw_items = dedupe(raw_items)
+    enrich_work_accident_candidates(fetcher, raw_items)
     age_filtered_items, age_rejected = filter_by_age(raw_items, args.local_days)
     relevant, rejected = filter_relevant(age_filtered_items)
     rejected.extend(age_rejected)

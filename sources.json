@@ -25,7 +25,9 @@
     "url": "https://www.glassumadije.rs/kategorija/ekonomija/",
     "enabled": true,
     "scope": "section",
-    "feed_url": "https://www.glassumadije.rs/kategorija/ekonomija/feed/"
+    "feed_url": "https://www.glassumadije.rs/kategorija/ekonomija/feed/",
+    "fallback_url": "https://naslovi.net/najnovije-vesti/izvor/glas-sumadije/",
+    "fallback_max_items": 12
   },
   {
     "name": "Inflacija.me — Ekonomija",
@@ -86,7 +88,9 @@
     "url": "https://www.ozonpress.net/ekonomija/",
     "enabled": true,
     "scope": "section",
-    "feed_url": "https://www.ozonpress.net/ekonomija/feed/"
+    "feed_url": "https://www.ozonpress.net/ekonomija/feed/",
+    "fallback_url": "https://naslovi.net/najnovije-vesti/izvor/ozon-press/",
+    "fallback_max_items": 12
   },
   {
     "name": "Jugpress",
@@ -97,10 +101,21 @@
   },
   {
     "name": "Užice Online — Vesti",
-    "url": "https://uzice.online/vesti/",
+    "url": "https://uzice.online/vesti",
     "enabled": true,
-    "scope": "section",
-    "feed_url": "https://uzice.online/vesti/feed/"
+    "scope": "section"
+  },
+  {
+    "name": "ZooMUE — Zapadna Srbija",
+    "url": "https://zoomue.rs/",
+    "enabled": true,
+    "scope": "site"
+  },
+  {
+    "name": "Zlatiborske Vesti",
+    "url": "https://zlatiborskevesti.rs/",
+    "enabled": true,
+    "scope": "site"
   },
   {
     "name": "Zrenjaninski — Ekonomija",
@@ -115,6 +130,13 @@
     "enabled": true,
     "scope": "section",
     "feed_url": "https://n1info.rs/biznis/feed/"
+  },
+  {
+    "name": "N1 — Vesti",
+    "url": "https://n1info.rs/vesti/",
+    "enabled": true,
+    "scope": "section",
+    "feed_url": "https://n1info.rs/vesti/feed/"
   },
   {
     "name": "B92 — Biz",
