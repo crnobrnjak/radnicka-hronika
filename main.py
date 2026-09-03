@@ -46,6 +46,8 @@ STATE_DIR = BASE_DIR / "state"
 DEBUG_DIR = BASE_DIR / "debug"
 SOURCES_PATH = BASE_DIR / "sources.json"
 HIDDEN_URLS_PATH = BASE_DIR / "hidden_urls.txt"
+ARCHIVE_PATH = STATE_DIR / "archive.json"
+PAGE_SIZE = 20
 
 # GDELT sourcecountry znači "medij iz Srbije", a ne "događaj u Srbiji".
 # GDELT DOC API traži najmanje 5 sekundi između zahteva.
@@ -1184,6 +1186,96 @@ def item_timestamp(item: Item) -> float:
     return 0.0
 
 
+def load_archive() -> list[dict]:
+    """Učitaj trajnu arhivu svih ranije prihvaćenih članaka."""
+    if not ARCHIVE_PATH.exists():
+        return []
+
+    try:
+        data = json.loads(ARCHIVE_PATH.read_text(encoding="utf-8"))
+        if isinstance(data, list):
+            return [x for x in data if isinstance(x, dict) and x.get("url")]
+    except Exception:
+        pass
+
+    return []
+
+
+def archive_record_timestamp(record: dict) -> float:
+    """Datum članka ima prednost; first_seen je rezervni datum za sortiranje."""
+    temp = Item(
+        title=record.get("title", ""),
+        url=record.get("url", ""),
+        source=record.get("source", ""),
+        source_kind=record.get("source_kind", ""),
+        date=record.get("date", ""),
+    )
+    ts = item_timestamp(temp)
+    if ts:
+        return ts
+
+    first_seen = (record.get("first_seen") or "").strip()
+    if first_seen:
+        try:
+            return datetime.fromisoformat(
+                first_seen.replace("Z", "+00:00")
+            ).timestamp()
+        except Exception:
+            pass
+
+    return 0.0
+
+
+def merge_archive(existing: list[dict], current_items: list[Item]) -> list[dict]:
+    """
+    Dodaj nove članke u arhivu i osveži metapodatke za već poznate URL-ove.
+    first_seen ostaje datum kada je Hronika prvi put videla članak.
+    """
+    now = datetime.now(timezone.utc).astimezone().isoformat(timespec="seconds")
+    by_url: dict[str, dict] = {}
+
+    for record in existing:
+        url = clean_url(record.get("url", ""))
+        if not url:
+            continue
+        copy = dict(record)
+        copy["url"] = url
+        copy.setdefault("first_seen", now)
+        by_url[url] = copy
+
+    for item in current_items:
+        url = clean_url(item.url)
+        if not url:
+            continue
+
+        previous = by_url.get(url, {})
+        by_url[url] = {
+            "title": item.title,
+            "url": url,
+            "source": item.source,
+            "source_kind": item.source_kind,
+            "summary": item.summary,
+            "date": item.date,
+            "categories": list(item.categories or []),
+            "reasons": list(item.reasons or []),
+            "query": item.query,
+            "first_seen": previous.get("first_seen") or now,
+            "last_seen": now,
+        }
+
+    archive = list(by_url.values())
+    archive.sort(key=archive_record_timestamp, reverse=True)
+    return archive
+
+
+def save_archive(records: list[dict]) -> None:
+    STATE_DIR.mkdir(exist_ok=True)
+    ARCHIVE_PATH.write_text(
+        json.dumps(records, ensure_ascii=False, indent=2),
+        encoding="utf-8",
+    )
+
+
 def filter_by_age(
     items: list[Item], max_age_days: int
 ) -> tuple[list[Item], list[dict]]:
@@ -1386,6 +1478,300 @@ def write_html(items: list[Item], statuses: list[dict]) -> Path:
 </body>
 </html>
 """
+    path = OUT_DIR / "report.html"
+    path.write_text(doc, encoding="utf-8")
+    return path
+
+
+def write_paginated_html(
+    archive: list[dict],
+    current_items: list[Item],
+    statuses: list[dict],
+    hidden_urls: set[str],
+) -> Path:
+    """
+    Prikaži trajnu arhivu po 20 članaka po strani.
+    Navigacija koristi ?page=2, ?page=3... i radi na GitHub Pages bez servera.
+    """
+    OUT_DIR.mkdir(exist_ok=True)
+
+    visible_archive = [
+        record
+        for record in archive
+        if clean_url(record.get("url", "")) not in hidden_urls
+    ]
+
+    generated = datetime.now().astimezone().strftime("%d.%m.%Y. %H:%M")
+    ok = sum(1 for s in statuses if not s.get("error"))
+    failed = sum(1 for s in statuses if s.get("error"))
+    new_urls = sorted({clean_url(x.url) for x in current_items if x.is_new})
+
+    archive_json = json.dumps(
+        visible_archive, ensure_ascii=False
+    ).replace("</", "<\\/")
+    new_urls_json = json.dumps(
+        new_urls, ensure_ascii=False
+    ).replace("</", "<\\/")
+
+    status_rows = []
+    for s in statuses:
+        state = "GREŠKA" if s.get("error") else "OK"
+        if s.get("error"):
+            detail = s["error"]
+        else:
+            detail = f'{s.get("method","")} · {s.get("candidates",0)} kandidata'
+            if s.get("feed_url"):
+                detail += f' · {s["feed_url"]}'
+            if s.get("query_variant"):
+                detail += f' · upit: {s["query_variant"]}'
+            if s.get("fallback_url"):
+                detail += f' · fallback: {s["fallback_url"]}'
+            if s.get("feed_error") and s.get("method") not in ("rss", "mirror"):
+                detail += f' · RSS nije uspeo: {s["feed_error"]}'
+        status_rows.append(
+            f"<tr><td>{esc(s['source'])}</td><td>{state}</td>"
+            f"<td>{esc(str(detail))}</td></tr>"
+        )
+
+    doc = f"""<!doctype html>
+<html lang="sr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Radnička hronika</title>
+<style>
+  body {{
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    max-width: 920px; margin: 0 auto; padding: 28px 18px 60px;
+    color: #171717; background: #fafafa; line-height: 1.45;
+  }}
+  h1 {{ margin-bottom: 4px; }}
+  .lead {{ color: #555; margin-top: 0; }}
+  .stats {{
+    padding: 12px 14px; background: white; border: 1px solid #ddd; margin: 22px 0;
+  }}
+  .item {{
+    background: white; border: 1px solid #ddd; padding: 16px 18px; margin: 12px 0;
+  }}
+  .item h2 {{ font-size: 1.12rem; margin: 7px 0; line-height: 1.3; }}
+  a {{ color: #111; }}
+  .meta, .why {{ color: #666; font-size: .84rem; }}
+  .summary {{ margin: 8px 0; color: #333; }}
+  .tag {{
+    display: inline-block; border: 1px solid #bbb; padding: 2px 7px;
+    margin: 4px 5px 4px 0; font-size: .78rem;
+  }}
+  .new {{
+    font-size: .72rem; font-weight: 700; border: 1px solid #111;
+    padding: 2px 5px; margin-right: 7px;
+  }}
+  .pager {{
+    display: flex; flex-wrap: wrap; align-items: center; justify-content: center;
+    gap: 6px; margin: 20px 0;
+  }}
+  .pager a, .pager span {{
+    display: inline-block; min-width: 28px; padding: 5px 8px;
+    border: 1px solid #bbb; background: white; text-align: center;
+    text-decoration: none;
+  }}
+  .pager .current {{
+    background: #171717; color: white; border-color: #171717;
+  }}
+  .pager .disabled {{ color: #aaa; }}
+  .pager .dots {{
+    border-color: transparent; background: transparent; min-width: auto;
+  }}
+  details {{ margin-top: 28px; }}
+  table {{
+    border-collapse: collapse; width: 100%; font-size: .82rem; background: white;
+  }}
+  td, th {{
+    border: 1px solid #ddd; padding: 6px; text-align: left; vertical-align: top;
+  }}
+</style>
+</head>
+<body>
+<h1>Radnička hronika</h1>
+<p class="lead">
+  Vesti o radnim pravima, zaradama, štrajkovima, uslovima rada,
+  otkazima i bezbednosti radnika u Srbiji.
+</p>
+
+<div class="stats">
+  Poslednje osvežavanje: <strong>{esc(generated)}</strong><br>
+  Ukupno u arhivi: <strong>{len(visible_archive)}</strong>
+  · novih u ovom prolazu: <strong>{len(new_urls)}</strong><br>
+  Izvora/upita bez greške: <strong>{ok}</strong> · sa greškom: <strong>{failed}</strong>
+</div>
+
+<div id="pager-top" class="pager" aria-label="Navigacija kroz arhivu"></div>
+<div id="items"></div>
+<div id="pager-bottom" class="pager" aria-label="Navigacija kroz arhivu"></div>
+
+<details id="source-status">
+  <summary>Tehnički status izvora</summary>
+  <table>
+    <thead><tr><th>Izvor</th><th>Status</th><th>Detalj</th></tr></thead>
+    <tbody>{''.join(status_rows)}</tbody>
+  </table>
+</details>
+
+<script id="archive-data" type="application/json">{archive_json}</script>
+<script id="new-url-data" type="application/json">{new_urls_json}</script>
+
+<script>
+(function () {{
+  const PAGE_SIZE = {PAGE_SIZE};
+  const archive = JSON.parse(
+    document.getElementById("archive-data").textContent || "[]"
+  );
+  const newUrls = new Set(JSON.parse(
+    document.getElementById("new-url-data").textContent || "[]"
+  ));
+
+  function escapeHtml(value) {{
+    return String(value == null ? "" : value)
+      .replace(/&/g, "&amp;")
+      .replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;")
+      .replace(/"/g, "&quot;")
+      .replace(/'/g, "&#039;");
+  }}
+
+  function pageUrl(n) {{
+    const u = new URL(window.location.href);
+    if (n <= 1) {{
+      u.searchParams.delete("page");
+    }} else {{
+      u.searchParams.set("page", String(n));
+    }}
+    return u.pathname + u.search + u.hash;
+  }}
+
+  const params = new URLSearchParams(window.location.search);
+  let page = parseInt(params.get("page") || "1", 10);
+  const totalPages = Math.max(1, Math.ceil(archive.length / PAGE_SIZE));
+
+  if (!Number.isFinite(page) || page < 1) page = 1;
+  if (page > totalPages) page = totalPages;
+
+  function card(item) {{
+    const badges = (item.categories || [])
+      .map(c => `<span class="tag">${{escapeHtml(c)}}</span>`)
+      .join("");
+
+    const reasons = (item.reasons || []).join(", ");
+    const date = item.date ? ` · ${{escapeHtml(item.date)}}` : "";
+    const summary = item.summary
+      ? `<p class="summary">${{escapeHtml(String(item.summary).slice(0, 420))}}</p>`
+      : "";
+    const novo = newUrls.has(item.url)
+      ? '<span class="new">NOVO</span>'
+      : "";
+
+    return `
+      <article class="item">
+        <div class="meta">${{novo}}<strong>${{escapeHtml(item.source || "")}}</strong>${{date}}</div>
+        <h2><a href="${{escapeHtml(item.url || "")}}" target="_blank"
+          rel="noopener noreferrer">${{escapeHtml(item.title || "")}}</a></h2>
+        ${{summary}}
+        <div class="tags">${{badges}}</div>
+        <div class="why">razlog: ${{escapeHtml(reasons)}} · preko:
+          ${{escapeHtml(item.source_kind || "")}}</div>
+      </article>
+    `;
+  }}
+
+  function pager() {{
+    if (totalPages <= 1) return "";
+
+    const parts = [];
+
+    if (page > 1) {{
+      parts.push(`<a href="${{pageUrl(page - 1)}}">← Novije</a>`);
+    }} else {{
+      parts.push('<span class="disabled">← Novije</span>');
+    }}
+
+    const wanted = new Set([1, totalPages]);
+    for (let n = page - 2; n <= page + 2; n++) {{
+      if (n >= 1 && n <= totalPages) wanted.add(n);
+    }}
+
+    const nums = Array.from(wanted).sort((a, b) => a - b);
+    let prev = 0;
+
+    for (const n of nums) {{
+      if (prev && n - prev > 1) {{
+        parts.push('<span class="dots">…</span>');
+      }}
+
+      if (n === page) {{
+        parts.push(
+          `<span class="current" aria-current="page">${{n}}</span>`
+        );
+      }} else {{
+        parts.push(`<a href="${{pageUrl(n)}}">${{n}}</a>`);
+      }}
+      prev = n;
+    }}
+
+    if (page < totalPages) {{
+      parts.push(`<a href="${{pageUrl(page + 1)}}">Starije →</a>`);
+    }} else {{
+      parts.push('<span class="disabled">Starije →</span>');
+    }}
+
+    return parts.join("");
+  }}
+
+  const start = (page - 1) * PAGE_SIZE;
+  const pageItems = archive.slice(start, start + PAGE_SIZE);
+  const itemsNode = document.getElementById("items");
+
+  if (pageItems.length) {{
+    itemsNode.innerHTML = pageItems.map(card).join("");
+  }} else {{
+    itemsNode.innerHTML =
+      "<p><strong>Arhiva je trenutno prazna.</strong></p>";
+  }}
+
+  const pagerHtml = pager();
+  document.getElementById("pager-top").innerHTML = pagerHtml;
+  document.getElementById("pager-bottom").innerHTML = pagerHtml;
+
+  // Današnji status izvora prikazuj samo uz prvu, najnoviju stranu.
+  if (page !== 1) {{
+    document.getElementById("source-status").hidden = true;
+  }}
+
+  function sendHeight() {{
+    const h = Math.max(
+      document.body ? document.body.scrollHeight : 0,
+      document.documentElement ? document.documentElement.scrollHeight : 0
+    );
+    if (window.parent && window.parent !== window) {{
+      window.parent.postMessage(
+        {{ type: "radnicka-hronika:height", height: h }},
+        "*"
+      );
+    }}
+  }}
+
+  window.addEventListener("load", sendHeight);
+  window.addEventListener("resize", sendHeight);
+  setTimeout(sendHeight, 100);
+  setTimeout(sendHeight, 500);
+
+  if (window.ResizeObserver && document.documentElement) {{
+    new ResizeObserver(sendHeight).observe(document.documentElement);
+  }}
+}})();
+</script>
+</body>
+</html>
+"""
+
     path = OUT_DIR / "report.html"
     path.write_text(doc, encoding="utf-8")
     return path
@@ -1596,9 +1982,17 @@ def main() -> int:
         reverse=True,
     )
 
+    archive = merge_archive(load_archive(), relevant)
+    save_archive(archive)
+
     write_debug(raw_items, relevant, rejected, statuses)
     json_path = write_json(relevant)
-    html_path = write_html(relevant, statuses)
+    html_path = write_paginated_html(
+        archive,
+        relevant,
+        statuses,
+        hidden_urls,
+    )
     save_seen(seen_before | {x.url for x in relevant})
 
     print()
