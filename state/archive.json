@@ -1,5 +1,31 @@
 [
   {
+    "title": "Unija sindikata: „Jovina gimnazija nije ničija privatna svojina“",
+    "url": "https://www.masina.rs/unija-sindikata-jovina-gimnazija-nije-nicija-privatna-svojina/",
+    "source": "Mašina",
+    "source_kind": "rss",
+    "summary": "Unija sindikata prosvetnih radnika Srbije zatražila je hitan inspekcijski nadzor u Gimnaziji „Jovan Jovanović Zmaj“ u Novom Sadu, navodeći da su poslednja dešavanja u toj školi prerasla okvire unutrašnjeg radnog spora.",
+    "date": "Fri, 04 Sep 2026 11:40:23 +0000",
+    "categories": [
+      "Sindikalno pitanje"
+    ],
+    "reasons": [
+      "sindikat + konkretno pitanje rada"
+    ],
+    "query": "",
+    "source_categories": [
+      "Društvo",
+      "Obrazovanje",
+      "Vesti",
+      "Gimnazija Jovan Jovanović Zmaj",
+      "Jovina gimnazija",
+      "Novi Sad",
+      "Unija sindikata prosvetnih radnika Srbije"
+    ],
+    "first_seen": "2026-09-04T17:55:54+00:00",
+    "last_seen": "2026-09-04T17:55:54+00:00"
+  },
+  {
     "title": "Samostalni sindikat Aptiv: Ne potpisujte sporazumne raskide ugovora bez zvanične odluke poslodavca",
     "url": "https://jugpress.com/samostalni-sindikat-aptiv-ne-potpisujte-sporazumne-raskide-ugovora-bez-zvanicne-odluke-poslodavca/",
     "source": "Jugpress",
@@ -18,7 +44,7 @@
       "Leskovac"
     ],
     "first_seen": "2026-09-04T16:54:03+00:00",
-    "last_seen": "2026-09-04T16:54:03+00:00"
+    "last_seen": "2026-09-04T17:55:54+00:00"
   },
   {
     "title": "Nadzorni odbor Volkswagena odobrio plan za ukidanje još 50.000 radnih mesta",
@@ -51,8 +77,17 @@
       "sindikat + konkretno pitanje rada"
     ],
     "query": "",
+    "source_categories": [
+      "Društvo",
+      "Obrazovanje",
+      "Vesti",
+      "obrazovanje",
+      "plate",
+      "Prosveta",
+      "Unija sindikata prosvetnih radnika Srbije"
+    ],
     "first_seen": "2026-09-04T09:55:21+00:00",
-    "last_seen": "2026-09-04T09:55:21+00:00"
+    "last_seen": "2026-09-04T17:55:54+00:00"
   },
   {
     "title": "Sindikati prosvete: Povećanje plata tek od 2027, država mora da ispuni preuzete obaveze",
@@ -76,7 +111,7 @@
       "Sindikati"
     ],
     "first_seen": "2026-09-04T09:55:21+00:00",
-    "last_seen": "2026-09-04T16:54:03+00:00"
+    "last_seen": "2026-09-04T17:55:54+00:00"
   },
   {
     "title": "Sindikati prosvete: Povećanje plata tek od 2027, država mora da ispuni preuzete obaveze",
@@ -101,7 +136,7 @@
       "povećanje plata"
     ],
     "first_seen": "2026-09-04T09:55:21+00:00",
-    "last_seen": "2026-09-04T16:54:03+00:00"
+    "last_seen": "2026-09-04T17:55:54+00:00"
   },
   {
     "title": "Unija SPRS: Do kraja 2026. godine nisu obezbeđena sredstva za povećanje zarada zaposlenih u prosveti",
@@ -125,7 +160,7 @@
       "unija sindikata prosvetnih radnika srbije"
     ],
     "first_seen": "2026-09-04T09:55:21+00:00",
-    "last_seen": "2026-09-04T16:54:03+00:00"
+    "last_seen": "2026-09-04T17:55:54+00:00"
   },
   {
     "title": "Osnovan Granski sindikat zaposlenih u visokom obrazovanju Srbije SVI",
@@ -210,13 +245,13 @@
     ],
     "query": "",
     "source_categories": [
-      "Vesti Zrenjanin",
       "Ekonomija",
+      "Vesti Zrenjanin",
       "\"Zrenjaninski socijalni forum\"",
       "Linglong",
       "povreda na radu"
     ],
     "first_seen": "2026-09-03T12:31:11+00:00",
-    "last_seen": "2026-09-04T16:54:03+00:00"
+    "last_seen": "2026-09-04T17:55:54+00:00"
   }
 ]
