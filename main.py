@@ -201,6 +201,35 @@ FOREIGN_URL_PARTS = (
     "/vesti/region/",
 )
 
+# RSS/Atom kategorije daju dodatni geografski signal.
+# Npr. Biznis.rs članak može imati kategoriju "Svet" iako URL/naslov
+# ne sadrže ime strane države.
+FOREIGN_SOURCE_CATEGORY_RX = re.compile(
+    r"\b(svet|eu|inostranstv\w*|globaln\w*)\b",
+    re.I,
+)
+
+SERBIA_SOURCE_CATEGORY_RX = re.compile(
+    r"\b(srbij\w*|domac\w*)\b",
+    re.I,
+)
+
+# Strani događaj često nema ime države u naslovu:
+# "širom sveta", "u Evropi", "na nivou cele grupe" itd.
+WORLD_SCOPE_RX = re.compile(
+    r"\b("
+    r"sirom\s+sveta|"
+    r"u\s+evropi|"
+    r"evropsk\w*.{0,24}fabrik\w*|"
+    r"fabrik\w*.{0,24}evrop\w*|"
+    r"na\s+nivou\s+(cele\s+)?grupe|"
+    r"na\s+globalnom\s+nivou|"
+    r"globaln\w*.{0,30}(radn\w+\s+mest|zaposlen|otpust)|"
+    r"van\s+srbije"
+    r")\b",
+    re.I,
+)
+
 # Berzanska/investiciona "zarada" nije zarada radnika.
 # Ne odbacujemo samo reč "akcije", jer ona može značiti i radničke akcije.
 MARKET_PROMO_RX = re.compile(
@@ -279,18 +308,27 @@ class Item:
     reasons: list[str] | None = None
     is_new: bool = True
     query: str = ""
+    source_categories: list[str] | None = None
 
     def __post_init__(self):
         if self.categories is None:
             self.categories = []
         if self.reasons is None:
             self.reasons = []
+        if self.source_categories is None:
+            self.source_categories = []
 
 
 def hard_reject(item: Item) -> str:
     title = norm_text(item.title)
     text = norm_text(f"{item.title} {item.summary}")
     url = norm_text(item.url)
+    source_categories = norm_text(" ".join(item.source_categories or []))
+
+    has_serbia_context = bool(
+        SERBIA_CONTEXT_RX.search(text)
+        or SERBIA_SOURCE_CATEGORY_RX.search(source_categories)
+    )
 
     if HUNGER_STRIKE_RX.search(text):
         if not (HUNGER_WORKER_RX.search(text) and HUNGER_LABOR_ISSUE_RX.search(text)):
@@ -308,7 +346,16 @@ def hard_reject(item: Item) -> str:
     if MARKET_PROMO_RX.search(title):
         return "berza/investiciona promocija"
 
-    if FOREIGN_CONTEXT_RX.search(text) and not SERBIA_CONTEXT_RX.search(text):
+    if (
+        FOREIGN_SOURCE_CATEGORY_RX.search(source_categories)
+        and not has_serbia_context
+    ):
+        return "strana kategorija izvora"
+
+    if (
+        FOREIGN_CONTEXT_RX.search(text)
+        or WORLD_SCOPE_RX.search(text)
+    ) and not has_serbia_context:
         return "radničko pitanje van Srbije"
 
     return ""
@@ -659,6 +706,25 @@ def parse_feed_bytes(content: bytes, source: dict, max_items: int) -> list[Item]
         summary_html = entry.get("summary", "") or entry.get("description", "")
         summary = BeautifulSoup(summary_html, "html.parser").get_text(" ", strip=True)
         date = entry.get("published", "") or entry.get("updated", "")
+
+        source_categories = []
+        for tag in entry.get("tags", []) or []:
+            if isinstance(tag, dict):
+                term = tag.get("term", "")
+            else:
+                term = getattr(tag, "term", "")
+            term = re.sub(r"\s+", " ", str(term or "")).strip()
+            if term:
+                source_categories.append(term)
+
+        category = re.sub(
+            r"\s+", " ", str(entry.get("category", "") or "")
+        ).strip()
+        if category:
+            source_categories.append(category)
+
+        source_categories = list(dict.fromkeys(source_categories))
+
         out.append(
             Item(
                 title=title,
@@ -667,6 +733,7 @@ def parse_feed_bytes(content: bytes, source: dict, max_items: int) -> list[Item]
                 source_kind="rss",
                 summary=summary[:900],
                 date=date[:100],
+                source_categories=source_categories,
             )
         )
     return out
@@ -1259,6 +1326,7 @@ def merge_archive(existing: list[dict], current_items: list[Item]) -> list[dict]
             "categories": list(item.categories or []),
             "reasons": list(item.reasons or []),
             "query": item.query,
+            "source_categories": list(item.source_categories or []),
             "first_seen": previous.get("first_seen") or now,
             "last_seen": now,
         }
@@ -1837,6 +1905,26 @@ SELF_TESTS = [
         False,
         "Cena akcije raste, investitori prate berzu.",
     ),
+    (
+        "Nadzorni odbor Volkswagena odobrio plan za ukidanje još 50.000 radnih mesta",
+        "",
+        False,
+        "",
+        ["Svet"],
+    ),
+    (
+        "Volkswagen planira ukidanje još 50.000 radnih mesta",
+        "",
+        False,
+        "Smanjenje broja zaposlenih sprovodi se širom sveta i na nivou cele grupe.",
+    ),
+    (
+        "Nemačka kompanija planira ukidanje 300 radnih mesta u Kragujevcu",
+        "",
+        True,
+        "",
+        ["Svet"],
+    ),
 
 ]
 
@@ -1847,8 +1935,12 @@ def run_self_test() -> int:
         if len(case) == 3:
             title, url, expected = case
             summary = ""
-        else:
+            source_categories = []
+        elif len(case) == 4:
             title, url, expected, summary = case
+            source_categories = []
+        else:
+            title, url, expected, summary, source_categories = case
 
         item = Item(
             title=title,
@@ -1856,6 +1948,7 @@ def run_self_test() -> int:
             source="test",
             source_kind="rss",
             summary=summary,
+            source_categories=source_categories,
         )
         got = bool(classify_item(item)[0])
         mark = "OK" if got == expected else "FAIL"
