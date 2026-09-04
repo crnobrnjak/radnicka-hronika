@@ -18,7 +18,9 @@
     "url": "https://kragujevacke.rs/kategorija/u-zizi/",
     "enabled": true,
     "scope": "section",
-    "feed_url": "https://kragujevacke.rs/kategorija/u-zizi/feed/"
+    "feed_url": "https://kragujevacke.rs/kategorija/u-zizi/feed/",
+    "fallback_url": "https://naslovi.net/izvor/kragujevacke/",
+    "fallback_max_items": 12
   },
   {
     "name": "Glas Šumadije — Ekonomija",
@@ -68,7 +70,9 @@
     "url": "https://www.masina.rs/",
     "enabled": true,
     "scope": "site",
-    "feed_url": "https://www.masina.rs/feed/"
+    "feed_url": "https://www.masina.rs/feed/",
+    "fallback_url": "https://naslovi.net/najnovije-vesti/izvor/masina/",
+    "fallback_max_items": 12
   },
   {
     "name": "021 — Biznis i ekonomija",

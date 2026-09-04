@@ -541,6 +541,8 @@ class Fetcher:
 
     def get(self, url: str, **kwargs) -> requests.Response:
         last = None
+        tried_415_fallback = False
+
         for attempt in range(self.retries):
             try:
                 r = self.session.get(
@@ -548,7 +550,40 @@ class Fetcher:
                 )
                 if r.status_code == 200:
                     return r
-                last = RuntimeError(f"HTTP {r.status_code} za {url}")
+
+                # Neki WAF/proxy serveri povremeno odbijaju naš široki Accept
+                # profil sa HTTP 415 čak i za običan GET. U tom slučaju samo
+                # jednom ponovi isti zahtev sa neutralnim Accept: */*.
+                if r.status_code == 415 and not tried_415_fallback:
+                    tried_415_fallback = True
+                    retry_kwargs = dict(kwargs)
+                    retry_headers = dict(retry_kwargs.pop("headers", {}) or {})
+                    retry_headers["Accept"] = "*/*"
+
+                    retry = self.session.get(
+                        url,
+                        timeout=self.timeout,
+                        allow_redirects=True,
+                        headers=retry_headers,
+                        **retry_kwargs,
+                    )
+                    if retry.status_code == 200:
+                        return retry
+
+                    last = RuntimeError(
+                        f"HTTP {retry.status_code} za {url} "
+                        f"posle 415 retry-ja sa Accept: */*"
+                    )
+
+                    # Ako i neutralni zahtev vraća 415, nema smisla ponavljati
+                    # isti obrazac još nekoliko puta; prepusti izvor fallback-u.
+                    if retry.status_code == 415:
+                        break
+
+                    r = retry
+                else:
+                    last = RuntimeError(f"HTTP {r.status_code} za {url}")
+
                 # 429: poštuj Retry-After ako ga server pošalje.
                 if r.status_code == 429:
                     try:
@@ -557,9 +592,12 @@ class Fetcher:
                         wait = 4
                     time.sleep(max(wait, 2.0 * (attempt + 1)))
                     continue
+
             except Exception as e:
                 last = e
+
             time.sleep(1.2 * (2**attempt))
+
         raise RuntimeError(f"Neuspešan GET {url}: {last}")
 
 
