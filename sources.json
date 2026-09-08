@@ -177,6 +177,13 @@
     "feed_url": "https://www.danas.rs/rubrika/vesti/drustvo/feed/"
   },
   {
+    "name": "Nova ekonomija — Srbija",
+    "url": "https://novaekonomija.rs/vesti-iz-zemlje/",
+    "enabled": true,
+    "scope": "section",
+    "feed_url": "https://novaekonomija.rs/vesti-iz-zemlje/feed/"
+  },
+  {
     "name": "Biznis.rs — Vesti",
     "url": "https://biznis.rs/vesti/",
     "enabled": true,
