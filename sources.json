@@ -196,5 +196,12 @@
     "enabled": true,
     "scope": "section",
     "feed_url": "https://vesnik017.rs/vesti/privreda/feed/"
+  },
+  {
+  "name": "Nova Naša Reč — Jablanički okrug",
+  "url": "https://novanasarec.org.rs/",
+  "enabled": true,
+  "scope": "site",
+  "feed_url": "https://novanasarec.org.rs/feed/"
   }
 ]
