@@ -1,5 +1,54 @@
 [
   {
+    "title": "Poginuo radnik na gradilištu na Novom Beogradu, pao sa 10 metara visine",
+    "url": "https://n1info.rs/vesti/poginuo-radnik-na-gradilistu-na-novom-beogradu-pao-sa-10-metara-visine/",
+    "source": "N1 — Vesti",
+    "source_kind": "rss",
+    "summary": "Građevinski radnik poginuo je sinoć nakon pada sa objekta u izgradnji na Novom Begradu, nezvanično saznaje N1.",
+    "date": "Sun, 13 Sep 2026 11:26:54 +0200",
+    "categories": [
+      "Smrt na radu"
+    ],
+    "reasons": [
+      "radnik stradao + kontekst radnog mesta"
+    ],
+    "query": "",
+    "source_categories": [
+      "Vesti",
+      "novi beograd",
+      "poginuo radnik",
+      "građevinski radnici"
+    ],
+    "first_seen": "2026-09-13T10:35:48+00:00",
+    "last_seen": "2026-09-13T10:35:48+00:00"
+  },
+  {
+    "title": "Profesor u Muzičkoj, posle 16 godina rada, ostao bez posla, učenici protestovali",
+    "url": "https://www.danas.rs/vesti/drustvo/profesor-u-muzickoj-posle-16-godina-rada-ostao-bez-posla-ucenici-protestovali/",
+    "source": "Danas — Društvo",
+    "source_kind": "rss",
+    "summary": "Učenici III/2 protestovali su danas ispred Muzičke škole u Kruševcu, jer njihovom razrednom, profesoru Danijelu Ivanoviću, nije produžen ugovor o radu. Učenici su skandirali: “Vratite nam razrednog” te upitali koliko ovakav postupak govori o školi i načinu na koji se odluke donose. Direktor škole, Aleksandar Todorović, tvrdi da je sve urađeno u skladu sa zakonom te za narednu nedelju najavljuje roditeljski sastanak.",
+    "date": "Sat, 12 Sep 2026 12:10:04 +0000",
+    "categories": [
+      "Otkazi / radna mesta"
+    ],
+    "reasons": [
+      "otpuštanje/gubitak posla + radni odnos"
+    ],
+    "query": "",
+    "source_categories": [
+      "Društvo",
+      "Danijel Ivanović",
+      "Kruševac",
+      "Muzička škola",
+      "otkaz",
+      "Portal odjek",
+      "Profesor fizičkog"
+    ],
+    "first_seen": "2026-09-13T10:35:48+00:00",
+    "last_seen": "2026-09-13T10:35:48+00:00"
+  },
+  {
     "title": "Protest akademske zajednice u Novom Sadu: Zaposleni na Filozofskom fakultetu u Nišu trpe zlostavljanje i ucene",
     "url": "https://www.danas.rs/vesti/drustvo/protest-akademske-zajednice-u-novom-sadu/",
     "source": "Danas — Društvo",
@@ -49,7 +98,7 @@
       "Tatjana Paunović"
     ],
     "first_seen": "2026-09-11T10:00:16+00:00",
-    "last_seen": "2026-09-12T09:34:19+00:00"
+    "last_seen": "2026-09-13T10:35:48+00:00"
   },
   {
     "title": "Zaposleni na Filozofskom fakultetu u Nišu tužiće Ministarstvo prosvete zbog plata",
@@ -123,7 +172,7 @@
       "Savez slobodnih sindikata Srbije"
     ],
     "first_seen": "2026-09-11T10:00:16+00:00",
-    "last_seen": "2026-09-12T09:34:19+00:00"
+    "last_seen": "2026-09-13T10:35:48+00:00"
   },
   {
     "title": "Ministarstvo šalje inspekcije na niški Filozofski – novac ne prebacuju, ali traže od fakulteta da isplati plate zaposlenima",
@@ -390,7 +439,7 @@
       "bezbednost i zdravlje na radu"
     ],
     "first_seen": "2026-09-05T09:17:46+00:00",
-    "last_seen": "2026-09-12T09:34:19+00:00"
+    "last_seen": "2026-09-13T10:35:48+00:00"
   },
   {
     "title": "Unija sindikata: „Jovina gimnazija nije ničija privatna svojina“",
