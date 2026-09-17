@@ -1,5 +1,98 @@
 [
   {
+    "title": "Opštinari naplaćuju prekovremene sate, a još nemamo Plan kvaliteta vazduha",
+    "url": "https://naslovi.net/rd/42369476",
+    "source": "OzonPress — Ekonomija",
+    "source_kind": "mirror",
+    "summary": "Ozon press pre 2 sata Dok se u Gradskoj upravi nadležnoj za zaštitu životne sredine uredno evidentira i plaća prekovremeni rad, Čačak i dalje nema usvojen Plan kvaliteta vazduha. Prema podacima do kojih je došlo Udruženje građana Znanjem za Čačak – Goran Arsenijević, novac za… »",
+    "date": "",
+    "categories": [
+      "Uslovi rada"
+    ],
+    "reasons": [
+      "prekovremeni rad"
+    ],
+    "query": "",
+    "source_categories": [],
+    "first_seen": "2026-09-17T10:22:41+00:00",
+    "last_seen": "2026-09-17T10:22:41+00:00"
+  },
+  {
+    "title": "Otkazi i disciplinski postupci: Sa čime se (ponovo) suočavaju zaposleni u Petoj beogradskoj gimnaziji",
+    "url": "https://www.masina.rs/otkazi-i-disciplinski-postupci-sa-cime-se-ponovo-suocavaju-zaposleni-u-petoj-beogradskoj-gimnaziji/",
+    "source": "Mašina",
+    "source_kind": "rss",
+    "summary": "Nastavni kadar i zaposleni Pete beogradske gimnazije se uprkos promeni v.d. direktora ponovo suočavaju sa otkazima i višestrukim disciplinskim postupcima. Nova školska godina samo je produbila već postojeće probleme kada je profesorka Milkica Prica dobila otkaz, dok je profesorka Violeta Kecman udaljena sa posla na tri meseca. Organizacija Prijatelji dece Srbije ocenila je stanje u školi kao dugotrajnu institucionalnu krizu, dok advokat Goran Cvetković za Mašinu objašnjava šta je sporno u postupku koji se vodi protiv profesorke Kecman.",
+    "date": "Wed, 16 Sep 2026 15:55:12 +0000",
+    "categories": [
+      "Otkazi / radna mesta"
+    ],
+    "reasons": [
+      "otkaz + zaposleni/radnik/sindikat"
+    ],
+    "query": "",
+    "source_categories": [
+      "Društvo",
+      "Obrazovanje",
+      "Vesti",
+      "goran cvetković",
+      "Peta beogradska gimnazija",
+      "Prijatelji dece Srbije",
+      "violeta kecman"
+    ],
+    "first_seen": "2026-09-17T10:22:41+00:00",
+    "last_seen": "2026-09-17T10:22:41+00:00"
+  },
+  {
+    "title": "Deo nastavnika sa DIF-a u Novom Sadu tvrdi da dvoje kolega ostaju bez posla iako ispunjavaju sve uslove, dekan Drid kaže „nemaju rezultate“",
+    "url": "https://www.danas.rs/vesti/drustvo/profesori-otkaz-drid-dif-fakulteta-sporta-i-fizickog-vaspitanja/",
+    "source": "Danas — Društvo",
+    "source_kind": "rss",
+    "summary": "Deo nastavnika sa novosadskog Fakulteta sporta i fizičkog vaspitanja (DIF) kažu da će dvoje njihovih kolega ostati bez posla iako ispunjavaju sve zakonske uslove da i dalje predaju. Članovi Izbornog veća su prilikom izbora u zvanje ovih profesora u dva navrata bili uzdržani.",
+    "date": "Wed, 16 Sep 2026 15:16:30 +0000",
+    "categories": [
+      "Otkazi / radna mesta"
+    ],
+    "reasons": [
+      "otpuštanje/gubitak posla + radni odnos"
+    ],
+    "query": "",
+    "source_categories": [
+      "Društvo",
+      "DIF",
+      "Fakultet sporta i fizičkog vaspitanja",
+      "Izbor u zvanje",
+      "Patrik Drid"
+    ],
+    "first_seen": "2026-09-17T10:22:41+00:00",
+    "last_seen": "2026-09-17T10:22:41+00:00"
+  },
+  {
+    "title": "Sud odbio tužbu Dušana Kokota predsednika prosvetnog sindikata protiv Dejana Vuka Stankovića",
+    "url": "https://www.masina.rs/sud-odbio-tuzbu-dusana-kokota-predsednika-prosvetnog-sindikata-protiv-dejana-vuka-stankovica/",
+    "source": "Mašina",
+    "source_kind": "rss",
+    "summary": "Prvi osnovni sud u Beogradu odbio je tužbu predsednika Nezavisnog sindikata prosvetnih radnika Srbije (NSPRS) Dušana Kokota protiv ministra prosvete Dejana Vuka Stankovića zbog krivičnog dela uvreda.",
+    "date": "Wed, 16 Sep 2026 11:13:24 +0000",
+    "categories": [
+      "Sindikalno pitanje"
+    ],
+    "reasons": [
+      "sindikat + konkretno pitanje rada"
+    ],
+    "query": "",
+    "source_categories": [
+      "Društvo",
+      "Pravosuđe",
+      "Vesti",
+      "Dejan Vuk Stanković",
+      "Dušan Kokot",
+      "Ministarstvo prosvete"
+    ],
+    "first_seen": "2026-09-17T10:22:41+00:00",
+    "last_seen": "2026-09-17T10:22:41+00:00"
+  },
+  {
     "title": "Sud odbacio tužbu predsednika sindikata prosvete Dušana Kokota protiv Dejana Vuka Stankovića",
     "url": "https://n1info.rs/vesti/sud-odbacio-tuzbu-dusana-kokota-protiv-ministra-vuka-stankovica/",
     "source": "N1 — Vesti",
@@ -45,7 +138,7 @@
       "tužba zbog uvrede"
     ],
     "first_seen": "2026-09-16T10:16:51+00:00",
-    "last_seen": "2026-09-16T10:16:51+00:00"
+    "last_seen": "2026-09-17T10:22:41+00:00"
   },
   {
     "title": "Zaposleni u Apoteci Beograd očekuju da im danas bude uplaćeno 16 i po zaostalih plata",
@@ -68,7 +161,7 @@
       "zaposleni"
     ],
     "first_seen": "2026-09-16T10:16:51+00:00",
-    "last_seen": "2026-09-16T10:16:51+00:00"
+    "last_seen": "2026-09-17T10:22:41+00:00"
   },
   {
     "title": "Predsednica sindikata: Zaposleni u Apoteci Beograd očekuju da im danas bude uplaćeno 16 i po zaostalih plata",
@@ -115,7 +208,7 @@
       "zaposljavanje"
     ],
     "first_seen": "2026-09-16T10:16:51+00:00",
-    "last_seen": "2026-09-16T10:16:51+00:00"
+    "last_seen": "2026-09-17T10:22:41+00:00"
   },
   {
     "title": "Novica Antić: MUP podatke o LRAD uređajima na protestu 15. marta označio kao strogo poverljive",
@@ -674,13 +767,13 @@
     "source_categories": [
       "Ekonomija",
       "Vesti Zrenjanin",
-      "nl",
-      "bezbednost i zdravlje na radu",
       "saveti",
-      "povrede na radu"
+      "povrede na radu",
+      "nl",
+      "bezbednost i zdravlje na radu"
     ],
     "first_seen": "2026-09-05T09:17:46+00:00",
-    "last_seen": "2026-09-16T10:16:51+00:00"
+    "last_seen": "2026-09-17T10:22:41+00:00"
   },
   {
     "title": "Unija sindikata: „Jovina gimnazija nije ničija privatna svojina“",
