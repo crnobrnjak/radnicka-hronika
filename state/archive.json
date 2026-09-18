@@ -1,5 +1,79 @@
 [
   {
+    "title": "Predsedništvo Srbije nije ispunilo obećanje: Radnici Apoteka Beograd juče nisu primili 16 zaostalih plata",
+    "url": "https://nova.rs/vesti/biznis/predsednistvo-srbije-nije-ispunilo-obecanje-radnici-apoteka-beograd-juce-nisu-primili-16-zaostalih-plata/",
+    "source": "Nova — Biznis",
+    "source_kind": "rss",
+    "summary": "Radnici Apoteka Beograd nisu još uvek dobili zaostale plate. Kako navode za Novu ekonomiju i dalje čekaju informaciju kada će se to desiti.",
+    "date": "Fri, 18 Sep 2026 10:14:49 +0200",
+    "categories": [
+      "Neisplaćene / umanjene zarade"
+    ],
+    "reasons": [
+      "nisu primili zaradu/akontaciju"
+    ],
+    "query": "",
+    "source_categories": [
+      "Biznis",
+      "aleksandar vučić",
+      "apoteke beograd"
+    ],
+    "first_seen": "2026-09-18T10:02:34+00:00",
+    "last_seen": "2026-09-18T10:02:34+00:00"
+  },
+  {
+    "title": "Predsedništvo Srbije nije ispunilo obećanje: Radnici Apoteka Beograd juče nisu primili 16 zaostalih plata",
+    "url": "https://novaekonomija.rs/vesti-iz-zemlje/predsednistvo-srbije-nije-ispunilo-obecanje-radnici-apoteka-beograd-juce-nisu-primili-16-zaostalih-plata",
+    "source": "Nova ekonomija — Srbija",
+    "source_kind": "rss",
+    "summary": "Radnici Apoteka Beograd nisu još uvek dobili zaostale plate. Kako navode za Novu ekonomiju i dalje čekaju informaciju kada će se to desiti. Naime, juče se pojavila vest da će radnici Apoteka Beograd dobiti svojih zaostalih 16 i po zarada, zaključno sa avgustovskom platom. Predsednica sindikata „Opstanak“ je rekla juče za FoNet da su zaposleni […]",
+    "date": "Thu, 17 Sep 2026 12:24:08 +0000",
+    "categories": [
+      "Neisplaćene / umanjene zarade",
+      "Sindikalno pitanje"
+    ],
+    "reasons": [
+      "nisu primili zaradu/akontaciju",
+      "sindikat + konkretno pitanje rada"
+    ],
+    "query": "",
+    "source_categories": [
+      "Srbija",
+      "Apoteka Beograd",
+      "apoteke",
+      "jelena šikuljak",
+      "plate"
+    ],
+    "first_seen": "2026-09-18T10:02:34+00:00",
+    "last_seen": "2026-09-18T10:02:34+00:00"
+  },
+  {
+    "title": "Apoteka Beograd dobija zaostale zarade, pitanje nabavke lekova i dalje nerešeno",
+    "url": "https://biznis.rs/vesti/srbija/apoteka-beograd-dobija-zaostale-zarade-pitanje-nabavke-lekova-i-dalje-nereseno/",
+    "source": "Biznis.rs — Vesti",
+    "source_kind": "rss",
+    "summary": "Ministarstvo finansija prenelo je sredstva na račun Grada Beograda namenjena za isplatu zaostalih zarada i otpremnina zaposlenima u Apotekarskoj ustanovi „Apoteka Beograd“, saopštila je danas ta ustanova. Isplata zaostalih zarada zaposlenima očekuje se u narednih nekoliko dana, u punom iznosu. „Time je Vlada Srbije ispunila obećanje dato sindikatima i zaposlenima...",
+    "date": "Thu, 17 Sep 2026 11:44:00 +0000",
+    "categories": [
+      "Sindikalno pitanje"
+    ],
+    "reasons": [
+      "sindikat + konkretno pitanje rada"
+    ],
+    "query": "",
+    "source_categories": [
+      "Poslovanje",
+      "Srbija",
+      "Zdravlje",
+      "APOTEKA",
+      "BEOGRAD",
+      "DUGOVANJA",
+      "POSLOVANJE"
+    ],
+    "first_seen": "2026-09-18T10:02:34+00:00",
+    "last_seen": "2026-09-18T10:02:34+00:00"
+  },
+  {
     "title": "Opštinari naplaćuju prekovremene sate, a još nemamo Plan kvaliteta vazduha",
     "url": "https://naslovi.net/rd/42369476",
     "source": "OzonPress — Ekonomija",
@@ -41,7 +115,7 @@
       "violeta kecman"
     ],
     "first_seen": "2026-09-17T10:22:41+00:00",
-    "last_seen": "2026-09-17T10:22:41+00:00"
+    "last_seen": "2026-09-18T10:02:34+00:00"
   },
   {
     "title": "Deo nastavnika sa DIF-a u Novom Sadu tvrdi da dvoje kolega ostaju bez posla iako ispunjavaju sve uslove, dekan Drid kaže „nemaju rezultate“",
@@ -161,7 +235,7 @@
       "zaposleni"
     ],
     "first_seen": "2026-09-16T10:16:51+00:00",
-    "last_seen": "2026-09-17T10:22:41+00:00"
+    "last_seen": "2026-09-18T10:02:34+00:00"
   },
   {
     "title": "Predsednica sindikata: Zaposleni u Apoteci Beograd očekuju da im danas bude uplaćeno 16 i po zaostalih plata",
