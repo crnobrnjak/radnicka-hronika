@@ -1,10 +1,112 @@
 [
   {
+    "title": "Mašina DNEVNIK večeras u 19.30: O opasnoj deregulaciji, nastavnicima bez plata, izborima…",
+    "url": "https://www.masina.rs/masina-dnevnik-veceras-u-19-30-o-opasnoj-deregulaciji-nastavnicima-bez-plata-izborima/",
+    "source": "Mašina",
+    "source_kind": "rss",
+    "summary": "Svakog radnog dana možete gledati Mašinin DNEVNIK u 19.30 časova, a danas pričamo o krizi na Filozofskom fakultetu u Nišu, urušavanju gradilišta na Voždovcu i targetiranju aktivistkinja. Kao i juče, u Dnevniku ćete moći da čujete kako teče izborna kampanja u Srbiji.",
+    "date": "Thu, 24 Sep 2026 15:07:48 +0000",
+    "categories": [
+      "Neisplaćene / umanjene zarade"
+    ],
+    "reasons": [
+      "bez plate/akontacije"
+    ],
+    "query": "",
+    "source_categories": [
+      "Aktuelno",
+      "Politika",
+      "Vesti",
+      "Mašina dnevnik"
+    ],
+    "first_seen": "2026-09-25T10:31:00+00:00",
+    "last_seen": "2026-09-25T10:31:00+00:00"
+  },
+  {
+    "title": "U apatinskoj fabrici Vero pokrenuta likvidacija: Već otpušteno više od 170 radnika",
+    "url": "https://n1info.rs/biznis/u-apatinskoj-fabrici-vero-pokrenuta-likvidacija-vec-otpusteno-vise-od-170-radnika/",
+    "source": "N1 — Biznis",
+    "source_kind": "rss",
+    "summary": "Posle 20 godina i sedam meseci rada, proizvođač obuće iz Apatina, preduzeće \"Vero\", odlazi u likvidaciju. Otpušteno je, prema rečima radnika, oko 90 s",
+    "date": "Thu, 24 Sep 2026 16:31:59 +0200",
+    "categories": [
+      "Otkazi / radna mesta"
+    ],
+    "reasons": [
+      "otpuštanje/gubitak posla + radni odnos"
+    ],
+    "query": "",
+    "source_categories": [
+      "Ekonomija",
+      "fabrika",
+      "apatin",
+      "otkazi",
+      "likvidacija",
+      "likvidacija preduzeća",
+      "zatvaranje fabrike",
+      "vero"
+    ],
+    "first_seen": "2026-09-25T10:31:00+00:00",
+    "last_seen": "2026-09-25T10:31:00+00:00"
+  },
+  {
+    "title": "Filozofski fakultet u Nišu 66 dana bez plata, krivična prijava protiv ministra prosvete",
+    "url": "https://www.masina.rs/filozofski-fakultet-u-nisu-66-dana-bez-plata-krivicna-prijava-protiv-ministra-prosvete/",
+    "source": "Mašina",
+    "source_kind": "rss",
+    "summary": "Zaposleni na Filozofskom fakultetu u Nišu više od dva meseca ne primaju zarade, dok fakultet tvrdi da mu Ministarstvo prosvete uskraćuje sredstva bez obrazloženja. Uprava fakulteta podnela je tužbu Upravnom sudu i krivičnu prijavu protiv ministra prosvete Dejana Vuka Stankovića, dok zaposleni opstaju zahvaljujući solidarnoj pomoći kolega, sindikata i građana.",
+    "date": "Thu, 24 Sep 2026 13:25:04 +0000",
+    "categories": [
+      "Neisplaćene / umanjene zarade",
+      "Sindikalno pitanje"
+    ],
+    "reasons": [
+      "bez plate/akontacije",
+      "sindikat + konkretno pitanje rada"
+    ],
+    "query": "",
+    "source_categories": [
+      "Društvo",
+      "Obrazovanje",
+      "Vesti",
+      "Dejan Vuk Stanković",
+      "Filozofski fakultet Niš",
+      "Niš",
+      "obrazovanje",
+      "plate",
+      "Profesori"
+    ],
+    "first_seen": "2026-09-25T10:31:00+00:00",
+    "last_seen": "2026-09-25T10:31:00+00:00"
+  },
+  {
+    "title": "Protest zaposlenih u predškolskim ustanovama 10. oktobra u Beogradu: „To je zasluga Ministarstva finansija“",
+    "url": "https://www.danas.rs/vesti/drustvo/protest-zaposlenih-u-predskolskim-ustanovama-10-oktobra-u-beogradu-to-je-zasluga-ministarstva-finansija/",
+    "source": "Danas — Društvo",
+    "source_kind": "rss",
+    "summary": "Članovi Samostalnog sindikata predškolskog vaspitanja i obrazovanja Srbije najavili su da će 10. oktobra održati protest u Beogradu, nezadovoljni što još uvek nije potpisan Aneks Posebnog kolektivnog ugovora za zaposlene u predškolskim ustanovama.",
+    "date": "Thu, 24 Sep 2026 10:32:20 +0000",
+    "categories": [
+      "Radnički protest",
+      "Sindikalno pitanje"
+    ],
+    "reasons": [
+      "radnici/zaposleni protestuju",
+      "sindikat + konkretno pitanje rada"
+    ],
+    "query": "",
+    "source_categories": [
+      "Društvo"
+    ],
+    "first_seen": "2026-09-25T10:31:00+00:00",
+    "last_seen": "2026-09-25T10:31:00+00:00"
+  },
+  {
     "title": "SNS sprema udar i na društvene mreže",
     "url": "https://naslovi.net/rd/42399573",
     "source": "OzonPress — Ekonomija",
     "source_kind": "mirror",
-    "summary": "Ozon press pre 3 sata Naprednjaci su već preko svoji televizija javno poručila šta nas čeka posle izbora: otpuštanje sudija i tužilaca koji nisu lojalisti i članovi SNS, otpuštanje profesora i nastavnika koji nisu lojalisti i članovi SNS, otpuštanje svih u javnom sektoru koji… »",
+    "summary": "Ozon press pre 1 dan Naprednjaci su već preko svoji televizija javno poručila šta nas čeka posle izbora: otpuštanje sudija i tužilaca koji nisu lojalisti i članovi SNS, otpuštanje profesora i nastavnika koji nisu lojalisti i članovi SNS, otpuštanje svih u javnom sektoru koji… »",
     "date": "",
     "categories": [
       "Otkazi / radna mesta"
@@ -15,7 +117,7 @@
     "query": "",
     "source_categories": [],
     "first_seen": "2026-09-24T10:28:22+00:00",
-    "last_seen": "2026-09-24T10:28:22+00:00"
+    "last_seen": "2026-09-25T10:31:00+00:00"
   },
   {
     "title": "Zaposleni na niškom Filozofskom fakultetu 63 dana bez plata, postavljena kutija za prikupljanje pomoći: \"Na rubu smo egzistencije, mi smo taoci, a niko ne pokušava da nas izbavi\"",
@@ -159,7 +261,7 @@
       "radnik"
     ],
     "first_seen": "2026-09-23T10:16:12+00:00",
-    "last_seen": "2026-09-24T10:28:22+00:00"
+    "last_seen": "2026-09-25T10:31:00+00:00"
   },
   {
     "title": "Zaposleni u fabrici obuće u Apatinu tvrde da je firma pred gašenjem: \"Pre nekoliko dana otpušteno 170 žena, sprema se nova tura od 180\"",
@@ -181,7 +283,7 @@
       "vero doo apatin"
     ],
     "first_seen": "2026-09-23T10:16:12+00:00",
-    "last_seen": "2026-09-24T10:28:22+00:00"
+    "last_seen": "2026-09-25T10:31:00+00:00"
   },
   {
     "title": "Kad vam poslodavac da otkaz: U kojim slučajevima možete da ga tužite?",
@@ -254,7 +356,7 @@
       "zaposleni"
     ],
     "first_seen": "2026-09-22T10:17:25+00:00",
-    "last_seen": "2026-09-24T10:28:22+00:00"
+    "last_seen": "2026-09-25T10:31:00+00:00"
   },
   {
     "title": "Deo zaposlenih na RTV održao jednosatni štrajk: Poručili direktoru da Javni servis ne služi da nekome pravi kampanju, već da građanima omogući da naprave izbor",
