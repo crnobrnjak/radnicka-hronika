@@ -1,5 +1,76 @@
 [
   {
+    "title": "Nema lekova na rafovima Apoteke Beograd: \"Dugovi prema dobavljačima, pacijenti na nas zaboravili\"",
+    "url": "https://n1info.rs/vesti/zaposleni-u-apoteci-beograd-ocekuju-da-ce-dobiti-lekove/",
+    "source": "N1 — Vesti",
+    "source_kind": "rss",
+    "summary": "Višemesečna kriza zaposlenih u Apoteci Beograd je, naizgled, okončana isplatom prethodno neisplaćenih zarada. Međutim, na rafovima Apoteke fali lekova",
+    "date": "Sat, 26 Sep 2026 10:33:51 +0200",
+    "categories": [
+      "Neisplaćene / umanjene zarade"
+    ],
+    "reasons": [
+      "neisplaćena zarada/akontacija"
+    ],
+    "query": "",
+    "source_categories": [
+      "Vesti",
+      "apoteka beograd",
+      "plate",
+      "lekovi",
+      "apoteke"
+    ],
+    "first_seen": "2026-09-26T10:10:27+00:00",
+    "last_seen": "2026-09-26T10:10:27+00:00"
+  },
+  {
+    "title": "\"To je kao ropstvo\": Svedočenja stranih radnika o eksploataciji u Srbiji i muk srpskih institucija",
+    "url": "https://n1info.rs/vesti/to-je-kao-ropstvo-svedocenja-stranih-radnika-o-eksploataciji-u-srbiji-i-muk-srpskih-institucija/",
+    "source": "N1 — Vesti",
+    "source_kind": "rss",
+    "summary": "Da li su fabrike stranih investitora zabranjena zona za srpske institucije? I pored brojnih svedočenja radnika - da rade na crno, bez ikakvih prava i",
+    "date": "Sat, 26 Sep 2026 08:33:13 +0200",
+    "categories": [
+      "Neprijavljen rad"
+    ],
+    "reasons": [
+      "rad na crno"
+    ],
+    "query": "",
+    "source_categories": [
+      "Vesti",
+      "institucije",
+      "eksploatacija radnika",
+      "strani radnici",
+      "mint"
+    ],
+    "first_seen": "2026-09-26T10:10:27+00:00",
+    "last_seen": "2026-09-26T10:10:27+00:00"
+  },
+  {
+    "title": "Nenastavno osoblje u visokom obrazovanju traži izjednačavanje koeficijenata",
+    "url": "https://www.masina.rs/nenastavno-osoblje-u-visokom-obrazovanju-trazi-izjednacavanje-koeficijenata/",
+    "source": "Mašina",
+    "source_kind": "rss",
+    "summary": "Sindikat zaposlenih Filozofskog fakulteta Univerziteta u Beogradu traži povećanje koeficijenata za nenastavno osoblje u visokom obrazovanju i njihovo usklađivanje sa koeficijentima za uporediva radna mesta u osnovnim i srednjim školama. Iz sindikata navode da su, uprkos izjednačavanju osnovica za plate od početka 2026. godine, razlike u koeficijentima ostale.",
+    "date": "Fri, 25 Sep 2026 14:36:00 +0000",
+    "categories": [
+      "Sindikalno pitanje"
+    ],
+    "reasons": [
+      "sindikat + konkretno pitanje rada"
+    ],
+    "query": "",
+    "source_categories": [
+      "Ekonomija",
+      "Radna prava",
+      "Vesti",
+      "Filozofski fakultet Beograd"
+    ],
+    "first_seen": "2026-09-26T10:10:27+00:00",
+    "last_seen": "2026-09-26T10:10:27+00:00"
+  },
+  {
     "title": "Mašina DNEVNIK večeras u 19.30: O opasnoj deregulaciji, nastavnicima bez plata, izborima…",
     "url": "https://www.masina.rs/masina-dnevnik-veceras-u-19-30-o-opasnoj-deregulaciji-nastavnicima-bez-plata-izborima/",
     "source": "Mašina",
@@ -47,7 +118,7 @@
       "vero"
     ],
     "first_seen": "2026-09-25T10:31:00+00:00",
-    "last_seen": "2026-09-25T10:31:00+00:00"
+    "last_seen": "2026-09-26T10:10:27+00:00"
   },
   {
     "title": "Filozofski fakultet u Nišu 66 dana bez plata, krivična prijava protiv ministra prosvete",
@@ -283,7 +354,7 @@
       "vero doo apatin"
     ],
     "first_seen": "2026-09-23T10:16:12+00:00",
-    "last_seen": "2026-09-25T10:31:00+00:00"
+    "last_seen": "2026-09-26T10:10:27+00:00"
   },
   {
     "title": "Kad vam poslodavac da otkaz: U kojim slučajevima možete da ga tužite?",
