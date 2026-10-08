@@ -1,5 +1,76 @@
 [
   {
+    "title": "Izborni inženjering? Pola listi manjinske, Niš bez plata | Mašina DNEVNIK, sreda, 7. oktobar",
+    "url": "https://www.masina.rs/izborni-inzenjering-pola-listi-manjinske-nis-bez-plata-masina-dnevnik-sreda-7-oktobar/",
+    "source": "Mašina",
+    "source_kind": "rss",
+    "summary": "Mašina Dnevnik gledajte svakog radnog dana od 19.30. Ne čekamo da drugi postanu javni servis.",
+    "date": "Thu, 08 Oct 2026 10:35:11 +0000",
+    "categories": [
+      "Neisplaćene / umanjene zarade"
+    ],
+    "reasons": [
+      "bez plate/akontacije"
+    ],
+    "query": "",
+    "source_categories": [
+      "Aktuelno",
+      "Politika",
+      "Vesti",
+      "Video",
+      "Izbori 2026",
+      "Mašina dnevnik"
+    ],
+    "first_seen": "2026-10-08T12:14:10+00:00",
+    "last_seen": "2026-10-08T12:14:10+00:00"
+  },
+  {
+    "title": "Radnici Vodovoda dobili samo 30 odsto plate, za ostatak čeka se rebalans koji nije na dnevnom redu predstojeće Skupštine",
+    "url": "https://www.juznevesti.com/drustvo/radnici-vodovoda-dobili-samo-30-odsto-plate-za-ostatak-ceka-se-rebalans-koji-nije-na-dnevnom-redu-predstojece-skupstine/",
+    "source": "Južne vesti — Društvo",
+    "source_kind": "rss",
+    "summary": "Radnici JKP Gradski vodovod u Prokuplju ponovo nisu dobili celu zaradu, za prethodni mesec isplaćeno im je svega 30 odsto plate, dok se za isplatu ostatka čeka rebalans gradskog budžeta. Međutim, prema zvanično objavljenom dnevnom redu sednice Skupštine grada Prokuplja zakazane za 12. oktobar, rebalans budžeta nije među tačkama o kojima će odbornici raspravljati, već […]",
+    "date": "Thu, 08 Oct 2026 08:15:07 +0000",
+    "categories": [
+      "Neisplaćene / umanjene zarade"
+    ],
+    "reasons": [
+      "nisu primili zaradu/akontaciju"
+    ],
+    "query": "",
+    "source_categories": [
+      "Društvo",
+      "smanjene plate",
+      "Vodovod Prokuplje"
+    ],
+    "first_seen": "2026-10-08T12:14:10+00:00",
+    "last_seen": "2026-10-08T12:14:10+00:00"
+  },
+  {
+    "title": "Zaposleni Filozofskog fakulteta u Nišu stižu u Beograd: Najavili protest ispred zgrade Ministarstva prosvete jer 78 dana nisu primili platu",
+    "url": "https://nova.rs/vesti/drustvo/zaposleni-filozofskog-fakulteta-najavili-protest-jer-nisu-primili-platu/",
+    "source": "Nova — Društvo",
+    "source_kind": "rss",
+    "summary": "Zaposleni na Filozofskom fakultetu u Nišu već 78 dana biju svoju najtežu bitku jer im Ministarstvo prosvete ne isplaćuje zarade. Kažu da im je teško i",
+    "date": "Thu, 08 Oct 2026 07:20:37 +0200",
+    "categories": [
+      "Neisplaćene / umanjene zarade"
+    ],
+    "reasons": [
+      "nisu primili zaradu/akontaciju"
+    ],
+    "query": "",
+    "source_categories": [
+      "Društvo",
+      "neisplaćene zarade",
+      "filozofski fakultet u nišu",
+      "protest",
+      "ministarstvo prosvete"
+    ],
+    "first_seen": "2026-10-08T12:14:10+00:00",
+    "last_seen": "2026-10-08T12:14:10+00:00"
+  },
+  {
     "title": "Protest samostalnog sindikata predškolskog vaspitanja u subotu",
     "url": "https://www.masina.rs/protest-samostalnog-sindikata-predskolskog-vaspitanja-u-subotu/",
     "source": "Mašina",
@@ -21,7 +92,7 @@
       "Samostalni sindikat predškolskog vaspitanja i obrazovanja"
     ],
     "first_seen": "2026-10-07T11:59:04+00:00",
-    "last_seen": "2026-10-07T11:59:04+00:00"
+    "last_seen": "2026-10-08T12:14:10+00:00"
   },
   {
     "title": "Zaposleni na Filozofskom fakultetu u Nišu 78 dana bez plata, protestovaće u Beogradu 12. oktobra",
@@ -222,7 +293,7 @@
       "Saša Antunović"
     ],
     "first_seen": "2026-10-06T12:12:50+00:00",
-    "last_seen": "2026-10-07T11:59:04+00:00"
+    "last_seen": "2026-10-08T12:14:10+00:00"
   },
   {
     "title": "ASNS preti štrajkom ako ministar odbrane ne otpočne dijalog o problemima vojnih fabrika",
@@ -273,7 +344,7 @@
       "vojne fabrike"
     ],
     "first_seen": "2026-10-06T12:12:50+00:00",
-    "last_seen": "2026-10-07T11:59:04+00:00"
+    "last_seen": "2026-10-08T12:14:10+00:00"
   },
   {
     "title": "„U Predsedništvu se niko ne javlja“: Radnici Apoteke Beograd kažu da nisu dobili novac za kupovinu lekova koji je obećao Vučić",
