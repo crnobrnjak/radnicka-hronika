@@ -1,5 +1,58 @@
 [
   {
+    "title": "Cvijić: Ako bilo koga otpuste u Radaru, idemo svi",
+    "url": "https://www.danas.rs/vesti/drustvo/cvijic-ako-bilo-koga-otpuste-u-radaru-idemo-svi/",
+    "source": "Danas — Društvo",
+    "source_kind": "rss",
+    "summary": "Novinar nedeljnika Radar Vuk Cvijić izjavio je danas, nakon što je menadžment kompanije \"Alpak kapital\" najavio ukidanje honorara za spoljne saradnike i otpuštanje honoraraca u tom nedeljniku, da je na redakcijskom sastanku odlučeno da će svi otići, ukoliko bilo ko bude otpušten.",
+    "date": "Fri, 30 Oct 2026 16:49:07 +0000",
+    "categories": [
+      "Otkazi / radna mesta"
+    ],
+    "reasons": [
+      "otpuštanje/gubitak posla + radni odnos"
+    ],
+    "query": "",
+    "source_categories": [
+      "Društvo",
+      "Alpak Kapital",
+      "novinar",
+      "Radar",
+      "Tužilaštvo",
+      "Vuk Cvijić"
+    ],
+    "first_seen": "2026-10-31T12:59:52+00:00",
+    "last_seen": "2026-10-31T12:59:52+00:00"
+  },
+  {
+    "title": "Sindikat IKUM-a upozorava na netransparentno vođenje Instituta",
+    "url": "https://www.masina.rs/sindikat-ikum-a-upozorava-na-netransparentno-vodenje-instituta/",
+    "source": "Mašina",
+    "source_kind": "rss",
+    "summary": "Sindikat Instituta za književnost i umetnost (IKUM) svoje probleme javno je iznosio i ranije, a juče su održali jednočasovni štrajk upozorenja. Jovan Bukumira, član sindikata IKUM-a, u razgvoru za Mašinu opisao je nedaće sa kojima se suočava ova institucija.",
+    "date": "Fri, 30 Oct 2026 16:46:50 +0000",
+    "categories": [
+      "Štrajk / radnička akcija",
+      "Sindikalno pitanje"
+    ],
+    "reasons": [
+      "štrajk/obustava rada + radnički kontekst",
+      "sindikat + konkretno pitanje rada"
+    ],
+    "query": "",
+    "source_categories": [
+      "Književnost",
+      "Kultura",
+      "Vesti",
+      "Institut za književnost i umetnost",
+      "Jovan Bukumira",
+      "sindikati",
+      "štrajk"
+    ],
+    "first_seen": "2026-10-31T12:59:52+00:00",
+    "last_seen": "2026-10-31T12:59:52+00:00"
+  },
+  {
     "title": "\"Lojalisti aktivirali rezervnu klupu\": \"Naš pRoTeSt\" o promenama na RTS-u, tvrde da novi urednici nisu podržali zahtev za objektivno izveštavanje",
     "url": "https://nova.rs/vesti/drustvo/lojalisti-aktivirali-rezervnu-klupu-nas-protest-o-promenama-na-rts-u-tvrde-da-novi-urednici-nisu-podrzali-zahtev-za-objektivno-izvestavanje/",
     "source": "Nova — Društvo",
@@ -250,7 +303,7 @@
       "Ministarstvo prosvete"
     ],
     "first_seen": "2026-10-29T13:38:04+00:00",
-    "last_seen": "2026-10-30T13:26:57+00:00"
+    "last_seen": "2026-10-31T12:59:52+00:00"
   },
   {
     "title": "DS: Beogradu preti saobraćajni kolaps zbog SNS-a",
@@ -296,7 +349,7 @@
       "Radar"
     ],
     "first_seen": "2026-10-29T13:38:04+00:00",
-    "last_seen": "2026-10-30T13:26:57+00:00"
+    "last_seen": "2026-10-31T12:59:52+00:00"
   },
   {
     "title": "Bez akontacije 5.200 zaposlenih u GSP-u, direktor tvrdi da je reč o tehničkoj grešci banke",
