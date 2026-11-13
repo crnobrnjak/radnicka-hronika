@@ -1,5 +1,73 @@
 [
   {
+    "title": "UNS: Više desetina novinara Republike ostalo bez posla",
+    "url": "https://www.danas.rs/vesti/drustvo/uns-vise-desetina-novinara-republike-ostalo-bez-posla/",
+    "source": "Danas — Društvo",
+    "source_kind": "rss",
+    "summary": "Više desetina novinara i medijskih radnika portala Republika.rs ostalo je bez posla a kompanija Medijska mreža, u čijem sastavu posluje taj portal, nije navela sa koliko će zaposlenih biti prekinuta saradnja, objavilo je danas Udruženje novinara Srbije (UNS).",
+    "date": "Fri, 13 Nov 2026 14:30:37 +0000",
+    "categories": [
+      "Otkazi / radna mesta"
+    ],
+    "reasons": [
+      "otpuštanje/gubitak posla + radni odnos"
+    ],
+    "query": "",
+    "source_categories": [
+      "Društvo",
+      "bez posla",
+      "Novinari",
+      "portal Republika",
+      "UNS"
+    ],
+    "first_seen": "2026-11-13T14:52:26+00:00",
+    "last_seen": "2026-11-13T14:52:26+00:00"
+  },
+  {
+    "title": "Deo zaposlenih u Institutu za povrtarstvo iz Smederevske Palanke: Nismo primili devet plata ove godine",
+    "url": "https://www.danas.rs/vesti/ekonomija/deo-zaposlenih-u-institutu-za-povrtarstvo-iz-smederevske-palanke-nismo-primili-devet-plata-ove-godine/",
+    "source": "Danas — Ekonomija",
+    "source_kind": "rss",
+    "summary": "Zaposleni u Institutu za povrtarstvo Smederevska Palanka oglasilo se saopštenjem u kom tvrdi da njih 16 nisu primili devet plata ove godine.",
+    "date": "Fri, 13 Nov 2026 11:30:40 +0000",
+    "categories": [
+      "Neisplaćene / umanjene zarade"
+    ],
+    "reasons": [
+      "nisu primili zaradu/akontaciju"
+    ],
+    "query": "",
+    "source_categories": [
+      "Ekonomija",
+      "institut za povrtarstvo",
+      "plate",
+      "smederevska palanka",
+      "zaposleni"
+    ],
+    "first_seen": "2026-11-13T14:52:26+00:00",
+    "last_seen": "2026-11-13T14:52:26+00:00"
+  },
+  {
+    "title": "Medveđa: Radnici JKP “Obnova” opet izašli na protest, predstavnici lokalne vlasti ih ignorisali",
+    "url": "https://novanasarec.org.rs/medvedja-radnici-jkp-obnova-opet-izasli-na-protest-predstavnici-lokalne-vlasti-ih-ignorisali/",
+    "source": "Nova Naša Reč — Jablanički okrug",
+    "source_kind": "rss",
+    "summary": "Radnici Javnog komunalnog preduzeća „Obnova“ iz Medveđe organizovali su miran protest u četvrtak ispred zgrade Skupštine opštine, nakon čega su protestnom šetnjom prošli ulicama centra [...]",
+    "date": "Fri, 13 Nov 2026 10:10:51 +0000",
+    "categories": [
+      "Radnički protest"
+    ],
+    "reasons": [
+      "radnici/zaposleni protestuju"
+    ],
+    "query": "",
+    "source_categories": [
+      "Medvedja"
+    ],
+    "first_seen": "2026-11-13T14:52:26+00:00",
+    "last_seen": "2026-11-13T14:52:26+00:00"
+  },
+  {
     "title": "Akcije kompanije Envidija na 14-godišnjem minimumu, moguće otpuštanje direktora zbog špijunske afere",
     "url": "https://n1info.rs/biznis/akcije-kompanije-envidija-na-14-godisnjem-minimumu-moguce-otpustanje-direktora-zbog-spijunske-afere/",
     "source": "N1 — Biznis",
@@ -171,7 +239,7 @@
       "kraljevo"
     ],
     "first_seen": "2026-11-10T15:11:49+00:00",
-    "last_seen": "2026-11-12T15:32:53+00:00"
+    "last_seen": "2026-11-13T14:52:26+00:00"
   },
   {
     "title": "Članovi Nezavisnog sindikata Gradske uprave Zrenjanina održali štrajk upozorenja",
@@ -541,8 +609,8 @@
     ],
     "query": "",
     "source_categories": [
-      "Ekonomija",
       "Vesti Zrenjanin",
+      "Ekonomija",
       "\"Drekslmajer\"",
       "\"Zrenjaninski socijalni forum\"",
       "radnici",
@@ -550,7 +618,7 @@
       "radnička prava"
     ],
     "first_seen": "2026-11-09T16:48:08+00:00",
-    "last_seen": "2026-11-12T15:32:53+00:00"
+    "last_seen": "2026-11-13T14:52:26+00:00"
   },
   {
     "title": "Kada zaposleni ima pravo na otpremninu?",
@@ -1351,7 +1419,7 @@
       "Radar"
     ],
     "first_seen": "2026-10-29T13:38:04+00:00",
-    "last_seen": "2026-11-12T15:32:53+00:00"
+    "last_seen": "2026-11-13T14:52:26+00:00"
   },
   {
     "title": "Bez akontacije 5.200 zaposlenih u GSP-u, direktor tvrdi da je reč o tehničkoj grešci banke",
