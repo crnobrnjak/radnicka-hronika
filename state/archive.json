@@ -1,5 +1,79 @@
 [
   {
+    "title": "Međunarodni dan muškaraca: Više od polovine doživelo sagorevanje na poslu",
+    "url": "https://novaekonomija.rs/vesti-iz-zemlje/medjunarodni-dan-muskaraca-vise-od-polovine-dozivelo-sagorevanje-na-poslu",
+    "source": "Nova ekonomija — Srbija",
+    "source_kind": "rss",
+    "summary": "Na tržište rada ulazi rano, odmah posle završene srednje škole, a radni vek provodi na fizički zahtevnim i rizičnim poslovima, uglavnom u građevinarstvu, industriji i transportu. Zbog tradicionalne uloge „hranitelja porodice“ češće prihvata prekovremeni rad, odsustvo zbog dece gotovo nikada ne koristi, a više od polovine njih priznaje da radi tempom koji vodi u sagorevanje […]",
+    "date": "Thu, 19 Nov 2026 09:59:30 +0000",
+    "categories": [
+      "Uslovi rada"
+    ],
+    "reasons": [
+      "prekovremeni rad"
+    ],
+    "query": "",
+    "source_categories": [
+      "Srbija",
+      "infostud",
+      "međunarodni dan muškaraca",
+      "muškarci"
+    ],
+    "first_seen": "2026-11-19T16:00:53+00:00",
+    "last_seen": "2026-11-19T16:00:53+00:00"
+  },
+  {
+    "title": "Više od polovine muškaraca na tržištu rada u Srbiji doživelo sagorevanje na poslu",
+    "url": "https://www.danas.rs/vesti/ekonomija/muskarci-trziste-rada-sagorevanje-posao/",
+    "source": "Danas — Ekonomija",
+    "source_kind": "rss",
+    "summary": "Na tržište rada ulazi rano, odmah posle završene srednje škole, a radni vek muškarci provode na fizički zahtevnim i rizičnim poslovima, uglavnom u građevinarstvu, industriji i transportu. Zbog tradicionalne uloge “hranitelja porodice” češće prihvata prekovremeni rad, odsustvo zbog dece gotovo nikada ne koristi, a više od polovine njih priznaje da radi tempom koji vodi u sagorevanje na poslu.",
+    "date": "Thu, 19 Nov 2026 09:57:22 +0000",
+    "categories": [
+      "Uslovi rada"
+    ],
+    "reasons": [
+      "prekovremeni rad"
+    ],
+    "query": "",
+    "source_categories": [
+      "Ekonomija",
+      "infostud",
+      "infostud Poslovi",
+      "Posao",
+      "sagorevanje na poslu",
+      "Svetski dan muškaraca",
+      "trziste rada"
+    ],
+    "first_seen": "2026-11-19T16:00:53+00:00",
+    "last_seen": "2026-11-19T16:00:53+00:00"
+  },
+  {
+    "title": "Najavili štrajk zbog neisplaćenih plata, pa proglašeni tehnološkim viškom: Radnici fabrike u Pojatama traže svoj novac",
+    "url": "https://nova.rs/vesti/drustvo/najavili-strajk-zbog-neisplacenih-plata-pa-proglaseni-tehnoloskim-viskom-radnici-fabrike-u-pojatama-traze-svoj-novac/",
+    "source": "Nova — Društvo",
+    "source_kind": "rss",
+    "summary": "U fabrici stočne hrane \"Nutrifeed Solutions\" u Pojatama obustavljena je proizvodnja. Za blizu trideset zaposlenih utvrđen je prestanak potrebe za rado",
+    "date": "Thu, 19 Nov 2026 08:22:12 +0100",
+    "categories": [
+      "Neisplaćene / umanjene zarade",
+      "Štrajk / radnička akcija"
+    ],
+    "reasons": [
+      "neisplaćena zarada/akontacija",
+      "štrajk/obustava rada + radnički kontekst"
+    ],
+    "query": "",
+    "source_categories": [
+      "Društvo",
+      "fabrika stočne hrane",
+      "pojate",
+      "nutrifeed solutions"
+    ],
+    "first_seen": "2026-11-19T16:00:53+00:00",
+    "last_seen": "2026-11-19T16:00:53+00:00"
+  },
+  {
     "title": "NSZ poziva radnike koji strahuju od otkaza da se informišu o svojim pravima i mogućnostima za novo zaposlenje",
     "url": "https://www.juznevesti.com/ekonomija/nsz-poziva-radnike-koji-strahuju-od-otkaza-da-se-informisu-o-svojim-pravima-i-mogucnostima-za-novo-zaposlenje/",
     "source": "Južne vesti — Ekonomija",
@@ -18,7 +92,7 @@
       "Nacionalna služba za zapošljavanje"
     ],
     "first_seen": "2026-11-18T15:57:14+00:00",
-    "last_seen": "2026-11-18T15:57:14+00:00"
+    "last_seen": "2026-11-19T16:00:53+00:00"
   },
   {
     "title": "Strahujete da biste mogli da ostanete bez posla? NSZ ima važnu poruku za vas",
@@ -42,7 +116,7 @@
       "otkazi"
     ],
     "first_seen": "2026-11-16T16:21:30+00:00",
-    "last_seen": "2026-11-18T15:57:14+00:00"
+    "last_seen": "2026-11-19T16:00:53+00:00"
   },
   {
     "title": "Niška Hitna pomoć zapošljava 5 radnika na određeno vreme",
@@ -518,7 +592,7 @@
       "kraljevo"
     ],
     "first_seen": "2026-11-10T15:11:49+00:00",
-    "last_seen": "2026-11-18T15:57:14+00:00"
+    "last_seen": "2026-11-19T16:00:53+00:00"
   },
   {
     "title": "Članovi Nezavisnog sindikata Gradske uprave Zrenjanina održali štrajk upozorenja",
