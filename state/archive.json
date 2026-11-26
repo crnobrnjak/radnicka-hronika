@@ -1,5 +1,52 @@
 [
   {
+    "title": "Jug Srbije ostao bez 13.500 radnih mesta, neophodno okretanje ka domaćim firmama",
+    "url": "https://biznis.rs/vesti/srbija/jug-srbije-ostao-bez-13-500-radnih-mesta-neophodno-okretanje-ka-domacim-firmama/",
+    "source": "Biznis.rs — Vesti",
+    "source_kind": "rss",
+    "summary": "Na jugu Srbije je, po podacima Udruženja građana „Niš, moj grad“, u protekle dve godine bez posla ostalo 13.500 ljudi. Bez posla su uglavnom ostali oni koji su radili u stranim kompanijama koje su u Srbiju stigle uz značajne državne subvencije, pa je sada opšteprihvaćeno mišljenje i ekonomskih stručnjaka i...",
+    "date": "Thu, 26 Nov 2026 15:07:00 +0000",
+    "categories": [
+      "Otkazi / radna mesta"
+    ],
+    "reasons": [
+      "otpuštanje/gubitak posla + radni odnos"
+    ],
+    "query": "",
+    "source_categories": [
+      "Preduzetnik",
+      "Srbija",
+      "OTKAZI",
+      "POSAO",
+      "PREDUZETNIK",
+      "SRBIJA"
+    ],
+    "first_seen": "2026-11-26T17:16:30+00:00",
+    "last_seen": "2026-11-26T17:16:30+00:00"
+  },
+  {
+    "title": "Niš, moj grad: Džonson elektrik 50 radnika šalje na plaćeno odsustvo",
+    "url": "https://novaekonomija.rs/vesti-iz-zemlje/nis-moj-grad-dzonson-elektrik-50-radnika-salje-na-placeno-odsustvo",
+    "source": "Nova ekonomija — Srbija",
+    "source_kind": "rss",
+    "summary": "Kopredsednik udruženja „Niš, moj grad“ Miodrag Stanković izjavio je danas da je kompanija „Džonson elektrik“ poslala na plaćeno odsustvo oko 50 radnika, uz naknadu od 65 odsto zarade. Stanković je podsetio da je u „Džonson elektriku“ prošle godine nekoliko stotina zaposlenih ostalo bez posla, neprodužavanjem ugovora na određeno vreme i sporazumnim raskidom ugovora. „Radnici su […]",
+    "date": "Thu, 26 Nov 2026 13:58:54 +0000",
+    "categories": [
+      "Uslovi rada",
+      "Otkazi / radna mesta"
+    ],
+    "reasons": [
+      "rad na određeno",
+      "otpuštanje/gubitak posla + radni odnos"
+    ],
+    "query": "",
+    "source_categories": [
+      "Srbija"
+    ],
+    "first_seen": "2026-11-26T17:16:30+00:00",
+    "last_seen": "2026-11-26T17:16:30+00:00"
+  },
+  {
     "title": "Sindikat kontrole letenja: Vučić pokazuje neprijateljski odnos prema sindikatima",
     "url": "https://www.masina.rs/sindikat-kontrole-letenja-vucic-pokazuje-neprijateljski-odnos-prema-sindikatima/",
     "source": "Mašina",
@@ -94,7 +141,7 @@
       "dugovanja radnicima"
     ],
     "first_seen": "2026-11-24T18:11:52+00:00",
-    "last_seen": "2026-11-25T17:34:08+00:00"
+    "last_seen": "2026-11-26T17:16:30+00:00"
   },
   {
     "title": "Radnici propalih društvenih firmi u Nišu ponovo protestovali zbog zaostalih plata",
@@ -252,7 +299,7 @@
       "vesti Kragujevac"
     ],
     "first_seen": "2026-11-23T18:41:57+00:00",
-    "last_seen": "2026-11-25T17:34:08+00:00"
+    "last_seen": "2026-11-26T17:16:30+00:00"
   },
   {
     "title": "Sindikat u Stelantisu: Bivši predsednik Srbije uznemirava javnost najavom o premeštanju fabrike",
@@ -678,7 +725,7 @@
       "otkazi"
     ],
     "first_seen": "2026-11-16T16:21:30+00:00",
-    "last_seen": "2026-11-25T17:34:08+00:00"
+    "last_seen": "2026-11-26T17:16:30+00:00"
   },
   {
     "title": "Niška Hitna pomoć zapošljava 5 radnika na određeno vreme",
